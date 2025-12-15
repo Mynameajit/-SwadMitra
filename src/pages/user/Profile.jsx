@@ -88,8 +88,7 @@ const UserProfile = () => {
         pb: { xs: 7, md: 2 },
         display: "flex",
         justifyContent: "center",
-        background:
-          theme.palette.mode === "light"
+        background:theme.palette.mode === "light"
             ? "rgba(255,255,255,0.05)"
             : "rgba(0,0,0,0.05)",
         backdropFilter: "blur(6px)",
@@ -215,7 +214,6 @@ const UserProfile = () => {
             borderRadius: 4,
             textAlign: "center",
             px: { xs: "0", md: 8 },
-            boxShadow: 0
 
           }}>
           <Stack

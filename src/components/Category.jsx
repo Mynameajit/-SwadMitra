@@ -76,13 +76,11 @@ const Category = ({ items = {}, i = 0, onClick }) => {
           alignItems: "center",
           justifyContent: "center",
           boxShadow: 1,
-          background:
-            theme.palette.mode === "dark"
+          background: theme.palette.mode === "dark"
               ? "rgba(255,255,255,0.06)"
               : "rgba(255,255,255,0.12)",
           backdropFilter: "blur(6px)",
-          boxShadow:
-            theme.palette.mode === "light"
+          boxShadow: theme.palette.mode === "light"
               ? "0 4px 18px rgba(0,0,0,0.12)"
               : "0 4px 18px rgba(0,0,0,0.6)",
 

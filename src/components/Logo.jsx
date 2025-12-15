@@ -47,7 +47,6 @@ const Logo = () => {
                         fontSize: "1.5rem",
                         fontWeight: 900,
                         letterSpacing: "1px",
-                        background: "linear-gradient(90deg, #fff, #ffe1db)",
                         WebkitBackgroundClip: "text",
                         WebkitTextFillColor: "transparent",
                         background: "linear-gradient(90deg, #FF1100, #FF5A36, #FF1100)",
