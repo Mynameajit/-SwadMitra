@@ -8,7 +8,7 @@ import { Toaster } from 'react-hot-toast';
 import { Provider } from 'react-redux';
 import { store } from './redux/store.js';
 import { initPWAInstall } from "./utils/pwaInstall";
-import ThemeModeProvider from './context/ThemeModeProvider.jsx'
+import ThemeModeProvider from './context/ThemeModeProvider .jsx'
 
 // 🔥 Init PWA install banner
 initPWAInstall();
