@@ -8,9 +8,6 @@ import Loader from "./components/Loader.jsx";
 import Home from "./pages/Home.jsx";
 
 
-// Lazy loaded pages & layouts (improves initial load)
-
-import Home from "./pages/Home.jsx";
 
 const SignIn = lazy(() => import("./pages/auth/Signin.jsx"));
 const Signup = lazy(() => import("./pages/auth/Signup.jsx"));
