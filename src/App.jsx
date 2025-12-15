@@ -5,7 +5,11 @@ import { Box } from "@mui/material";
 import Loader from "./components/Loader.jsx"; // Suspense fallback loader
 
 // Lazy loaded pages & layouts (improves initial load)
+<<<<<<< HEAD
 const Home = lazy(() => import("./Pages/Home.jsx"));
+=======
+const Home = lazy(() => import("./Pages/Home.jsx"));;
+>>>>>>> b3d2b2c5cbce458e52701ab9ee7cbde6d1df8786
 const SignIn = lazy(() => import("./pages/auth/Signin.jsx"));
 const Signup = lazy(() => import("./pages/auth/Signup.jsx"));
 
