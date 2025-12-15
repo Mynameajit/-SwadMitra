@@ -7,12 +7,11 @@ import Loader from "./components/Loader.jsx";
 /* Pages */
 import Home from "./pages/Home.jsx";
 
-<<<<<<< HEAD
-=======
+
 // Lazy loaded pages & layouts (improves initial load)
 
 import Home from "./pages/Home.jsx";
->>>>>>> 1b59c258753d4270646ac96e1e285adaa2a4aaac
+
 const SignIn = lazy(() => import("./pages/auth/Signin.jsx"));
 const Signup = lazy(() => import("./pages/auth/Signup.jsx"));
 
