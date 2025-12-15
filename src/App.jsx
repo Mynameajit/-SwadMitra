@@ -7,13 +7,12 @@ import Loader from "./components/Loader.jsx";
 /* Pages */
 import Home from "./pages/Home.jsx";
 
+/* Auth */
 const SignIn = lazy(() => import("./pages/auth/Signin.jsx"));
 const Signup = lazy(() => import("./pages/auth/Signup.jsx"));
 
 /* Owner */
-const OwnerDashboard = lazy(() =>
-  import("./pages/owner/OwnerDashboard.jsx")
-);
+
 const OwnerHome = lazy(() => import("./pages/owner/OwnerHome.jsx"));
 const OwnerProfile = lazy(() => import("./pages/owner/OwnerProfile.jsx"));
 const Orders = lazy(() => import("./pages/owner/Orders.jsx"));
@@ -21,11 +20,7 @@ const AddItems = lazy(() => import("./pages/owner/AddItem.jsx"));
 const OwnerItems = lazy(() => import("./pages/owner/OwnerItems.jsx"));
 
 /* User */
-const UserDashboard = lazy(() =>
-  import("./pages/user/UserDashboard.jsx")
-);
-const Hero = lazy(() => import("./pages/user/Hero.jsx"));
-const Items = lazy(() => import("./pages/Items.jsx"));
+
 const Cart = lazy(() => import("./pages/Cart.jsx"));
 const OrderSummary = lazy(() => import("./pages/OrderSummary.jsx"));
 const UserProfile = lazy(() => import("./pages/user/Profile.jsx"));
@@ -47,8 +42,14 @@ import useGetCartItems from "./hooks/useGetCartItems.jsx";
 
 import ShippingDetails from "./pages/ShippingDetails.jsx";
 import Payment from "./pages/Payment.jsx";
+import Items from "./pages/Items.jsx";
+import OwnerDashboard from "./Pages/owner/OwnerDashboard.jsx";
+import UserDashboard from "./Pages/user/UserDashboard.jsx";
+import Hero from "./Pages/user/Hero.jsx";
 
-export const backendURL = "http://localhost:8080/api";
+/* Backend URL (Vercel-safe) */
+export const backendURL =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:8080/api";
 
 function App() {
   useGetCurrentUser();
@@ -76,14 +77,16 @@ function App() {
 
       <Suspense fallback={<Loader />}>
         <Routes>
+          {/* Public */}
           <Route path="/" element={<Home />} />
 
-          {/* User */}
+          {/* User layout */}
           <Route element={<UserDashboard />}>
-            <Route path="/" element={<Hero />} />
-            <Route path="/menu" element={<Items />} />
+            <Route index element={<Hero />} />
+            <Route path="menu" element={<Items />} />
           </Route>
 
+          {/* Protected user routes */}
           <Route
             element={
               <ProtectedRoute isProtected={true}>
@@ -91,11 +94,11 @@ function App() {
               </ProtectedRoute>
             }
           >
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/order-summary" element={<OrderSummary />} />
-            <Route path="/shipping-details" element={<ShippingDetails />} />
-            <Route path="/payment" element={<Payment />} />
-            <Route path="/profile" element={<UserProfile />} />
+            <Route path="cart" element={<Cart />} />
+            <Route path="order-summary" element={<OrderSummary />} />
+            <Route path="shipping-details" element={<ShippingDetails />} />
+            <Route path="payment" element={<Payment />} />
+            <Route path="profile" element={<UserProfile />} />
           </Route>
 
           {/* Owner */}
@@ -106,16 +109,16 @@ function App() {
               </ProtectedRoute>
             }
           >
-            <Route path="/owner/dashboard" element={<OwnerHome />} />
-            <Route path="/owner/orders" element={<Orders />} />
-            <Route path="/owner/add-item" element={<AddItems />} />
-            <Route path="/owner/items" element={<OwnerItems />} />
-            <Route path="/owner/profile" element={<OwnerProfile />} />
+            <Route path="owner/dashboard" element={<OwnerHome />} />
+            <Route path="owner/orders" element={<Orders />} />
+            <Route path="owner/add-item" element={<AddItems />} />
+            <Route path="owner/items" element={<OwnerItems />} />
+            <Route path="owner/profile" element={<OwnerProfile />} />
           </Route>
 
           {/* Auth */}
           <Route
-            path="/signin"
+            path="signin"
             element={
               <ProtectedRoute isProtected={false}>
                 <SignIn />
@@ -123,7 +126,7 @@ function App() {
             }
           />
           <Route
-            path="/signup"
+            path="signup"
             element={
               <ProtectedRoute isProtected={false}>
                 <Signup />
@@ -131,6 +134,7 @@ function App() {
             }
           />
 
+          {/* 404 */}
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Suspense>

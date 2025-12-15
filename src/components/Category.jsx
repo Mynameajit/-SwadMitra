@@ -75,7 +75,6 @@ const Category = ({ items = {}, i = 0, onClick }) => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          boxShadow: 1,
           background: theme.palette.mode === "dark"
               ? "rgba(255,255,255,0.06)"
               : "rgba(255,255,255,0.12)",
