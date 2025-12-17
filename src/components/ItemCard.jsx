@@ -261,7 +261,7 @@ export const QuantityInput = ({ qty, increaseQty, decreaseQty, disabled = false,
             }}
             size="small"
             sx={{
-                width: { xs: "7.5rem", md: "7rem" },
+                width: { xs: "7.5rem", md: "7.5rem" },
                 "& .MuiOutlinedInput-root": {
                     borderRadius: "10px",
                     height: 36,
@@ -272,7 +272,7 @@ export const QuantityInput = ({ qty, increaseQty, decreaseQty, disabled = false,
                     "&:hover fieldset": { borderColor: "#FF1100" },
                     "&.Mui-focused fieldset": { borderColor: "#FF1100" },
                 },
-                "& .MuiInputAdornment-root svg": { fontSize: 20 },
+                "& .MuiInputAdornment-root svg": { fontSize: 18 },
             }}
             InputProps={{
                 startAdornment: (

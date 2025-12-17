@@ -90,7 +90,7 @@ const Items = () => {
     }, [dispatch]);
 
     return (
-        <Stack width="100%" minHeight="100vh" pt={{ xs: 4, md: 5 }}
+        <Stack width="100%" minHeight="100vh" pt={{ xs: 4, md: 4 }}
             style={{
                 background:
                     theme.palette.mode === "light"

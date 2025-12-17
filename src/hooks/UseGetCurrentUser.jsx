@@ -27,7 +27,7 @@ const useGetCurrentUser = () => {
     };
 
     fetchUser();
-  }, []);
+  }, [user]);
 
   // return { user, loading, error };
 };

@@ -53,8 +53,8 @@ export default function Hero({ onPrimaryClick }) {
 
   return (
     <Box component="section" sx={{ pt: { xs: 2, md: 10 } }}>
-      <Container maxWidth="xl" sx={{ px: { xs: 2, md: 14 }, pb: { xs: 0, md: 8 } }}>
-        <Grid container spacing={{ xs: 2, md: 5 }} alignItems="center" pt={{ xs: 6, md: 1 }}>
+      <Container maxWidth="xl" sx={{ px: { xs: 2, md: 15 }, pb: { xs: 0, md: 16 } }}>
+        <Grid container spacing={{ xs: 2, md: 4}} alignItems="center" pt={{ xs: 6, md: 1 }}>
 
           {/* LEFT (text) */}
           <Grid item xs={12} md={6}>
@@ -85,7 +85,7 @@ export default function Hero({ onPrimaryClick }) {
                   fontWeight: 900,
                   lineHeight: 1.05,
                   letterSpacing: "-0.02em",
-                  fontSize: { xs: "2.4rem", md: "3.6rem" },
+                  fontSize: { xs: "2.4rem", md: "3.7rem" },
                   background: "linear-gradient(90deg, #FF1100, #FF5A36)",
                   backgroundClip: "text",
                   WebkitBackgroundClip: "text",
@@ -230,8 +230,8 @@ export default function Hero({ onPrimaryClick }) {
                   top: isSm ? 0 : "6%",
                   left: isSm ? "50%" : "4%",
                   transform: isSm ? "translateX(-50%)" : "none",
-                  width: isSm ? "86%" : 220,
-                  height: isSm ? 160 : 200,
+                  width: isSm ? "86%" : 230,
+                  height: isSm ? 160 : 220,
                   borderRadius: 2,
                   overflow: "hidden",
                   boxShadow: "0 10px 25px rgba(0,0,0,0.12)",
@@ -276,7 +276,7 @@ export default function Hero({ onPrimaryClick }) {
                   right: isSm ? "50%" : "6%",
                   transform: isSm ? "translateX(50%)" : "none",
                   width: isSm ? "86%" : 230,
-                  height: isSm ? 160 : 200,
+                  height: isSm ? 160 : 220,
                   borderRadius: 2,
                   overflow: "hidden",
                   boxShadow: "0 10px 25px rgba(0,0,0,0.12)",
@@ -317,11 +317,11 @@ export default function Hero({ onPrimaryClick }) {
                 whileHover={{ scale: 1.03 }}
                 sx={{
                   position: "absolute",
-                  bottom: isSm ? -12 : "6%",
+                  bottom: isSm ? -12 : "0%",
                   left: isSm ? "50%" : "30%",
                   transform: isSm ? "translateX(-50%)" : "none",
-                  width: isSm ? "80%" : 200,
-                  height: isSm ? 150 : 180,
+                  width: isSm ? "80%" : 220,
+                  height: isSm ? 150 : 200,
                   borderRadius: 2,
                   overflow: "hidden",
                   boxShadow: "0 8px 20px rgba(0,0,0,0.1)",
@@ -359,7 +359,6 @@ export default function Hero({ onPrimaryClick }) {
 
       {/* Items section (kept below hero) */}
       <Items />
-      <Payment/>
     </Box>
   );
 }

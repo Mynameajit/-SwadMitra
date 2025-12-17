@@ -27,7 +27,6 @@ import { useNavigate } from "react-router-dom";
 const OrderSummary = ({
     addresses = [],
     cart = [],
-    onProceedPayment = () => { },
     onAddAddress = () => { },
     onUpdateAddress = () => { }
 }) => {
@@ -78,6 +77,9 @@ const OrderSummary = ({
     };
     const closeEdit = () => setEditOpen(false);
 
+    const onProceedPayment=()=>{
+        Navigate("/payment")
+    }
 
 
 

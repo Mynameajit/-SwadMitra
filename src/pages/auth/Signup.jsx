@@ -29,6 +29,7 @@ import BackgroundCircles from "../../utils/Background";
 import { FcGoogle } from "react-icons/fc";
 import { InputField } from "../../components/auth/InputField";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 
 
 
@@ -57,7 +58,7 @@ const AnimatedBox = ({ delay, children }) => (
 
 // ---------- Main Component ----------
 const SignIn = () => {
-
+  const dispatch = useDispatch()
   const Navigate = useNavigate();
   const theme = useTheme()
   const [showPassword, setShowPassword] = useState(false);
@@ -72,6 +73,7 @@ const SignIn = () => {
   // signup function
   const handleSignup = async () => {
 
+    setLoading(true)
 
     try {
       if (!fullname || !email || !password) {
@@ -82,10 +84,14 @@ const SignIn = () => {
       const res = await axios.post(`${backendURL}/auth/signup`, { fullName: fullname, email, password, role: "user" }, {
         withCredentials: true,
       });
+      dispatch(setUserData(res?.data?.user))
+      toast.success(res?.data.message || "Signup Successful")
+      Navigate('/');
+      setLoading(false)
 
-      toast.success(res.data.message || "Signup Successful")
-      Navigate('/signin');
+
     } catch (error) {
+      setLoading(false)
       toast.error(error.response.data.message || "Signup Failed")
     }
   }

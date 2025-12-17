@@ -10,6 +10,7 @@ import {
   Paper,
   Stack,
   useTheme,
+  CircularProgress,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
@@ -32,6 +33,8 @@ import axios from "axios";
 import BackgroundCircles from "../../utils/Background";
 import RoleSelector from "../../components/auth/RoleSelector ";
 import { InputField } from "../../components/auth/InputField";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../../redux/userSlice";
 
 // ---------- Animation Variants ----------
 const containerVariants = {
@@ -59,6 +62,7 @@ const AnimatedBox = ({ delay, children }) => (
 const SignIn = () => {
   const Navigate = useNavigate();
   const theme = useTheme();
+  const dispatch = useDispatch()
 
   const [showPassword, setShowPassword] = useState(false);
   const [isGmailOTP, setIsGmailOTP] = useState(false);
@@ -85,9 +89,8 @@ const SignIn = () => {
 
   //  Signin email and password handler
   const handleSignIn = async () => {
+    setLoading(true)
     try {
-
-
       if (!email || !password) {
         toast.error("Please Enter The Email and Password")
         return
@@ -96,17 +99,21 @@ const SignIn = () => {
         console.log("Please select a role");
       }
       //signin user logic here
-      const res = await axios.post(`${backendURL}/auth/signin`, { email, password, role: selected }, {
+      const { data } = await axios.post(`${backendURL}/auth/signin`, { email, password, role: selected }, {
         withCredentials: true,
       });
-
-      toast.success(res.data.message || "Signed in successfully");
-      window.location.reload();
-      if (role === "owner") Navigate("/owner/dashboard");
-      else if (role === "delivery") Navigate("/delivery/dashboard");
+      dispatch(setUserData(data?.data?.user))
+      toast.success(data?.data?.message || "Signed in successfully");
+      setLoading(false)
+      window.location.reload()
+      if (data.user.role === "owner") Navigate("/owner/dashboard");
+      else if (data.user.role.role === "delivery") Navigate("/delivery/dashboard");
       else Navigate("/");
+
     } catch (error) {
-      toast.error(error.response.data.message || "Something went wrong during sign in");
+      setLoading(false)
+      toast.error(error?.response.data?.message || "Something went wrong during sign in");
+      console.log("error for signin", error)
     }
 
   };
@@ -158,6 +165,7 @@ const SignIn = () => {
           alignItems: "center",
           justifyContent: "center",
           height: "100%",
+          width: "100%"
 
         }}
       >
@@ -285,8 +293,10 @@ const SignIn = () => {
                 {/* ---------- Sign In / Send OTP Button ---------- */}
                 <AnimatedBox delay={0.8}>
                   <Button
-                    onClick={isGmailOTP ? isSendOtp ? handlerVerifyOtp : handlerSendOtp : handleSignIn}
-                    disabled={isSendOtp ? otp.length < 4 ? true : false : false}
+                    onClick={handleSignIn}
+                    disabled={loading ? true : false}
+                    // onClick={isGmailOTP ? isSendOtp ? handlerVerifyOtp : handlerSendOtp : handleSignIn}
+                    // disabled={isSendOtp ? otp.length < 4 ? true : false : false}
                     fullWidth
                     variant="contained"
                     sx={{
@@ -301,20 +311,16 @@ const SignIn = () => {
                       alignItems: "center",
                       justifyContent: "center",
                       gap: 1,
-                      // background: accentPurple,
-                      background: `${isSendOtp ? otp.length > 4 ? accentPurple : "gray" : accentPurple}`,
+                      background: `${!loading ? "#FF1100" : "gray"}`,
+                      color: "white"
 
-                      "&:hover": { background: accentPurpleHover },
                     }}
                   >
                     {
                       loading ? (
-                        "Loading....."
+                        <CircularProgress size={25} />
                       ) : <>
-
-                        {isGmailOTP ? isSendOtp ? "" : <Send /> : <Login />}
-
-                        {isGmailOTP ? isSendOtp ? "Verify OTP" : "Send OTP" : "Sign In"}
+                        Sign In
                       </>
                     }
 

@@ -43,13 +43,12 @@ import useGetCartItems from "./hooks/useGetCartItems.jsx";
 import ShippingDetails from "./pages/ShippingDetails.jsx";
 import Payment from "./pages/Payment.jsx";
 import Items from "./pages/Items.jsx";
-import OwnerDashboard from "./Pages/owner/OwnerDashboard.jsx";
-import UserDashboard from "./Pages/user/UserDashboard.jsx";
-import Hero from "./Pages/user/Hero.jsx";
+import OwnerDashboard from "./pages/owner/OwnerDashboard.jsx";
+import UserDashboard from "./pages/user/UserDashboard.jsx";
+import Hero from "./pages/user/Hero.jsx";
 
 /* Backend URL (Vercel-safe) */
-export const backendURL =
-  import.meta.env.VITE_BACKEND_URL || "http://localhost:8080/api";
+export const backendURL =import.meta.env.VITE_BACKEND_URL || "http://localhost:8080/api";
 
 function App() {
   useGetCurrentUser();
@@ -74,15 +73,14 @@ function App() {
           <BackgroundCircles />
         </Suspense>
       </Box>
+     
 
       <Suspense fallback={<Loader />}>
         <Routes>
-          {/* Public */}
-          <Route path="/" element={<Home />} />
-
+            <Route path="/" element={ <Home />} />
           {/* User layout */}
           <Route element={<UserDashboard />}>
-            <Route index element={<Hero />} />
+            <Route path="/" element={<Hero />} />
             <Route path="menu" element={<Items />} />
           </Route>
 

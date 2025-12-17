@@ -96,10 +96,16 @@ const Header = () => {
 
   const orderSummaryPage = "/order-summary";
   const shippingDetails = "/shipping-details";
+  const signin = "/signin";
+  const signup = "/signup";
+  const payment = "/payment";
 
   const isNav = !(
     location.pathname === orderSummaryPage ||
-    location.pathname === shippingDetails
+    location.pathname === shippingDetails ||
+    location.pathname === payment ||
+    location.pathname === signin ||
+    location.pathname === signup 
   );
   // ===========================================================
   //                      JSX START

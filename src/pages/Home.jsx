@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Stack, useTheme } from "@mui/material";
 import { useSelector } from "react-redux";
 import UserDashboard from "./user/UserDashboard";
-import OwnerDashboard from "./owner/OwnerDashboard";
+import OwnerDashboard from "./owner/OwnerDashboard.jsx";
 import DeliveryBoyDashboard from "./deliveryBoy/DeliveryBoyDashboard";
 import BackgroundCircles from "../utils/Background";
 
