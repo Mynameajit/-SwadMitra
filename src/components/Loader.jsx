@@ -1,18 +1,9 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Box, Typography, CircularProgress, useTheme } from "@mui/material";
 import { motion } from "framer-motion";
+import BackgroundCircles from "../utils/Background";
 
-/**
- * ProjectLoaderSimple
- * Props:
- *  - logoComponent: optional React component (your Logo)
- *  - title: string (default "SwadMitra")
- *  - subtitle: string (optional)
- *  - size: number (logo diameter px, default 84)
- *
- * Usage:
- *  <ProjectLoaderSimple logoComponent={Logo} />
- */
+
 export default function Loader({
   logoComponent: LogoComp = null,
   title = "SwadMitra",
@@ -51,10 +42,24 @@ export default function Loader({
         justifyContent: "center",
         overflow: "hidden",
         padding: 2,
-        zIndex:100
+        zIndex:100,
+        bgcolor: theme.palette.mode === "dark" ? "#0A0A0A" : "#FFFFFF",
       }}
       aria-live="polite"
     >
+       <Box
+              sx={{
+                position: "fixed",
+                inset: 0,
+                zIndex: 0,
+                pointerEvents: "none",
+              }}
+            >
+              <Suspense fallback={null}>
+                <BackgroundCircles />
+              </Suspense>
+            </Box>
+      
       {/* background soft circles (centered behind logo) */}
       <Box
         sx={{
