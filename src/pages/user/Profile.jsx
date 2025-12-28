@@ -43,7 +43,7 @@ const getInitials = (name = "") => {
 
 const UserProfile = () => {
   const theme = useTheme();
-  const Navigate=useNavigate()
+  const Navigate = useNavigate()
   const { userData } = useSelector(state => state.user);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const dispatch = useDispatch()
@@ -51,6 +51,7 @@ const UserProfile = () => {
   const [isEdit, setIsEdit] = useState(false)
   const [oldData, setOldData] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [logoutLoading, setLogoutLoading] = useState(false)
 
   if (!userData) return null;
 
@@ -64,14 +65,14 @@ const UserProfile = () => {
     setOldData(address)
     setLoading(true)
     try {
-      const res = await axios.post(`${backendURL}/user/address/delate/${address?._id}`,{}, {
+      const res = await axios.post(`${backendURL}/user/address/delate/${address?._id}`, {}, {
         withCredentials: true,
 
       });
       toast.success(res.data.message);
       dispatch(setUserData(res.data.user));
       setLoading(false)
-    setOldData(null)
+      setOldData(null)
 
     } catch (error) {
       setLoading(false)
@@ -79,6 +80,17 @@ const UserProfile = () => {
       toast.error(error.response?.data?.message || "Internal server error");
     }
   }
+
+  const handleLogout = async () => {
+    try {
+      await axios.post(`${backendURL}/auth/signout`, {}, { withCredentials: true });
+      dispatch(setUserData(null));
+      Navigate("/");
+    } catch (err) {
+      console.log("Logout error:", err);
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -88,9 +100,9 @@ const UserProfile = () => {
         pb: { xs: 7, md: 2 },
         display: "flex",
         justifyContent: "center",
-        background:theme.palette.mode === "light"
-            ? "rgba(255,255,255,0.05)"
-            : "rgba(0,0,0,0.05)",
+        background: theme.palette.mode === "light"
+          ? "rgba(255,255,255,0.05)"
+          : "rgba(0,0,0,0.05)",
         backdropFilter: "blur(6px)",
       }}
     >
@@ -111,20 +123,28 @@ const UserProfile = () => {
             px: { xs: "0", md: 8 },
             position: "relative"
           }}>
-          <Button sx={{
-            bgcolor: "#FF1100",
-            color: "white",
-            fontSize: ".7rem",
-            textTransform: "capitalize",
-            position: "absolute",
-            bottom: 2,
-            right: 2,
-            zIndex: 100,
-            width: { xs: "100%", md: "8rem" },
-            borderRadius: ".7rem"
-          }}>
-
-            <Logout /> LogOut
+          <Button
+            onClick={handleLogout}
+            sx={{
+              bgcolor: "#FF1100",
+              color: "white",
+              fontSize: ".7rem",
+              textTransform: "capitalize",
+              position: "absolute",
+              bottom: 2,
+              right: 2,
+              zIndex: 100,
+              width: { xs: "100%", md: "8rem" },
+              borderRadius: ".7rem"
+            }}>
+            {
+              logoutLoading ? (
+                <CircularProgress />
+              ) :
+                <>
+                  <Logout /> LogOut
+                </>
+            }
           </Button>
 
           <Stack spacing={1} alignItems="center">
@@ -224,9 +244,9 @@ const UserProfile = () => {
             gap={2}
           >
             <Typography variant="h5" sx={{ fontWeight: "700" }} color="#FF1100">🏠 Addresses</Typography>
-            <Button 
-            onClick={()=>Navigate("/shipping-details")}
-            sx={{ bgcolor: "#FF1100", color: "white", fontSize: ".7rem", textTransform: "capitalize" }}>
+            <Button
+              onClick={() => Navigate("/shipping-details")}
+              sx={{ bgcolor: "#FF1100", color: "white", fontSize: ".7rem", textTransform: "capitalize" }}>
               + Add Address
             </Button>
           </Stack>
@@ -282,7 +302,7 @@ const UserProfile = () => {
                 </Stack>
 
                 <Typography sx={{ fontSize: 13, color: "gray" }}>
-                  {address.buildingName}, {address.landmark},
+                 {address.buildingName},  {address.landmark}
                 </Typography>
                 <Typography sx={{ fontSize: 13, color: "gray" }}>
                   {address.city}, {address.state} - {address.pinCode}

@@ -10,6 +10,7 @@ import {
   IconButton,
   InputAdornment,
   useTheme,
+  CircularProgress,
 } from "@mui/material";
 import { motion } from "framer-motion";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -66,6 +67,7 @@ const SignIn = () => {
   const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
 
   const togglePassword = () => setShowPassword((prev) => !prev);
@@ -84,15 +86,18 @@ const SignIn = () => {
       const res = await axios.post(`${backendURL}/auth/signup`, { fullName: fullname, email, password, role: "user" }, {
         withCredentials: true,
       });
-      dispatch(setUserData(res?.data?.user))
+      // dispatch(setUserData(res?.data?.user))
+      console.log(res.data);
+      
       toast.success(res?.data.message || "Signup Successful")
+      window.location.reload()
       Navigate('/');
       setLoading(false)
 
 
     } catch (error) {
       setLoading(false)
-      toast.error(error.response.data.message || "Signup Failed")
+      toast.error(error?.response?.data?.message || "Signup Failed")
     }
   }
 
@@ -219,6 +224,7 @@ const SignIn = () => {
                 {/* Sign In Button */}
                 <AnimatedBox delay={.8}>
                   <Button
+                      disabled={loading ? true : false}
                     onClick={handleSignup}
                     fullWidth
                     variant="contained"
@@ -234,7 +240,13 @@ const SignIn = () => {
                       "&:hover": { background: accentPurpleHover },
                     }}
                   >
-                    Sign In
+                    {
+                      loading ? (
+                        <CircularProgress size={25} />
+                      ) : <>
+                        Sign Up
+                      </>
+                    }
                   </Button>
                 </AnimatedBox>
 

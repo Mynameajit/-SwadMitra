@@ -21,6 +21,7 @@ import {
 } from "@mui/material";
 import Items from "../Items";
 import Payment from "../Payment";
+import Footer from "../Footer";
 
 const MotionTypography = motion(Typography);
 const MotionStack = motion(Stack);
@@ -52,9 +53,9 @@ export default function Hero({ onPrimaryClick }) {
   const accent = "#FF1100";
 
   return (
-    <Box component="section" sx={{ pt: { xs: 2, md: 10 } }}>
+    <Box component="section" sx={{ pt: { xs: 2, md: 11 } }}>
       <Container maxWidth="xl" sx={{ px: { xs: 2, md: 15 }, pb: { xs: 0, md: 16 } }}>
-        <Grid container spacing={{ xs: 2, md: 4}} alignItems="center" pt={{ xs: 6, md: 1 }}>
+        <Grid container spacing={{ xs: 2, md: 8}} alignItems="center" pt={{ xs: 6, md: 1 }}>
 
           {/* LEFT (text) */}
           <Grid item xs={12} md={6}>
@@ -85,7 +86,7 @@ export default function Hero({ onPrimaryClick }) {
                   fontWeight: 900,
                   lineHeight: 1.05,
                   letterSpacing: "-0.02em",
-                  fontSize: { xs: "2.4rem", md: "3.7rem" },
+                  fontSize: { xs: "2.4rem", md: "3.8rem" },
                   background: "linear-gradient(90deg, #FF1100, #FF5A36)",
                   backgroundClip: "text",
                   WebkitBackgroundClip: "text",
@@ -359,6 +360,8 @@ export default function Hero({ onPrimaryClick }) {
 
       {/* Items section (kept below hero) */}
       <Items />
+
+      <Footer/>
     </Box>
   );
 }

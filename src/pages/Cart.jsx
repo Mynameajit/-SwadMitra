@@ -35,6 +35,7 @@ const Cart = () => {
     console.log(userData.address);
 
     const CheckoutHandle = () => {
+        
         if (userData?.address.length > 0) {
             Navigate("/order-summary")
         }

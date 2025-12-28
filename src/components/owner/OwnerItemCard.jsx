@@ -77,7 +77,7 @@ const OwnerItemCard = ({ item, editHandler, deleteHandler, loading, i }) => {
                 <Stack spacing={1}>
                     {/* Title  */}
                     <Stack direction="row" alignItems="center" justifyContent="space-between">
-                        <Typography variant="h6" fontWeight={700}>
+                        <Typography sx={{fontSize:{xs:"1rem",md:"1.1rem"}}} fontWeight={600}>
                             {item?.name}
                         </Typography>
 
@@ -85,8 +85,8 @@ const OwnerItemCard = ({ item, editHandler, deleteHandler, loading, i }) => {
                         <Typography
                             sx={{
                                 backgroundColor: "rgba(0, 255, 0, 0.08)",
-                                padding: "2px 6px",
-                                fontSize: "12px",
+                                padding: "2px 3px",
+                                fontSize: "11px",
                                 borderRadius: "4px",
                                 display: "inline-block",
                                 color: "#FF1100",
@@ -124,7 +124,7 @@ const OwnerItemCard = ({ item, editHandler, deleteHandler, loading, i }) => {
                     </Stack>
 
                     {/* Description */}
-                    <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                    <Typography variant="caption" sx={{ opacity: 0.9 }}>
                         {item.description?.substring(0, 100) +
                             (item.description?.length > 100 ? "..." : "")}
                     </Typography>

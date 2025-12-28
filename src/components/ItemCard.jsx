@@ -28,7 +28,7 @@ const containerVariants = {
     }),
 };
 
-const ItemCard = ({ item = {}, handelAddCart, loading = false, i = 0 }) => {
+const ItemCard = ({ item = {}, handelAddCart, loading, i = 0, loadingData }) => {
     const theme = useTheme();
     const [qty, setQty] = useState(1);
 
@@ -64,7 +64,6 @@ const ItemCard = ({ item = {}, handelAddCart, loading = false, i = 0 }) => {
 
     // Safeguard add-to-cart
     const handleAdd = () => {
-        if (loading) return;
         if (Number(item.stock || 0) === 0) return;
         handelAddCart(item, qty);
     };
@@ -117,7 +116,7 @@ const ItemCard = ({ item = {}, handelAddCart, loading = false, i = 0 }) => {
             {/* Product image */}
             <CardMedia
                 component="img"
-                image={item.image }
+                image={item.image}
                 alt={item.name || "product"}
                 height={200}
                 sx={{
@@ -229,7 +228,7 @@ const ItemCard = ({ item = {}, handelAddCart, loading = false, i = 0 }) => {
                     <Button
                         onClick={handleAdd}
                         variant="contained"
-                        disabled={loading || cardDisabled}
+                        disabled={loading && loadingData._id == item._id}
                         sx={{
                             flex: 1,
                             bgcolor: "#FF1100",
@@ -240,7 +239,7 @@ const ItemCard = ({ item = {}, handelAddCart, loading = false, i = 0 }) => {
                             "&:hover": { bgcolor: "#d90900" },
                         }}
                     >
-                        {loading ? <CircularProgress size={20} sx={{ color: "#fff" }} /> : "ADD to Cart"}
+                        {loading && loadingData._id == item._id ? <CircularProgress size={20} sx={{ color: "#fff" }} /> : "ADD to Cart"}
                     </Button>
                 </Stack>
             </CardContent>
@@ -250,7 +249,7 @@ const ItemCard = ({ item = {}, handelAddCart, loading = false, i = 0 }) => {
 
 /* Clean QuantityInput using InputAdornment + IconButton for accessibility */
 export const QuantityInput = ({ qty, increaseQty, decreaseQty, disabled = false, item }) => {
-    
+
     return (
         <TextField
             value={qty}

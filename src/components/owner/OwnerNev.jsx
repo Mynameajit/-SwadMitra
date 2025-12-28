@@ -23,37 +23,46 @@ import { accent } from "../../utils/color";
 import { useThemeMode } from "../../context/ThemeModeProvider ";
 import useScrollPosition from "../../hooks/useScrollPosition";
 
-const NavButton = ({ label, icon, path }) => (
-  <NavLink
-    to={path}
-    style={({ isActive }) => ({
-      textDecoration: "none",
-    })}
-  >
-    {({ isActive }) => (
-      <Button
-        fullWidth
-        startIcon={icon}
-        sx={{
-          justifyContent: "flex-start",
-          textTransform: "none",
-          borderRadius: 2,
-          px: 2,
-          py: 1.2,
-          transition: "all 0.3s ease",
-          color: isActive ? "#fff" : "white",
-          backgroundColor: isActive ? "#660800" : "#FF1100",
-          "&:hover": {
-            backgroundColor: "#660800",
-            color: "#fff",
-          },
-        }}
-      >
-        {label}
-      </Button>
-    )}
-  </NavLink>
-);
+const NavButton = ({ label, icon, path }) => {
+  const theme = useTheme()
+
+  return (
+
+    <NavLink
+      to={path}
+      style={({ isActive }) => ({
+        textDecoration: "none",
+      })}
+    >
+      {({ isActive }) => (
+        <Button
+          fullWidth
+          startIcon={icon}
+          sx={{
+            justifyContent: "flex-start",
+            textTransform: "none",
+            borderRadius: 2,
+            px: 2,
+            py: 1.2,
+            transition: "all 0.3s ease",
+            color: theme.palette.mode === "dark" ? isActive ? "#fff" : "white" : isActive ? "#fff" : "black",
+            backgroundColor: isActive ? "#FF1100" : "",
+            border: " 1px solid #FF1100",
+            boxShadow: 2,
+            "&:hover": {
+              backgroundColor: "#FF1100",
+              color: "#fff",
+            },
+          }}
+        >
+          {label}
+        </Button>
+      )}
+    </NavLink>
+
+  )
+};
+
 
 const OwnerNav = ({ navbarLinks }) => {
   const dispatch = useDispatch();
@@ -94,50 +103,56 @@ const OwnerNav = ({ navbarLinks }) => {
 
 
         <IconButton
-          sx={{ 
-            display: { xs: "none", md: "flex" ,
-              position:"fixed",
-              right:0,
-              top:0,
+          sx={{
+            display: {
+              xs: "none", md: "flex",
+              position: "fixed",
+              right: 0,
+              top: 0,
 
-            } }}
+            }
+          }}
           onClick={toggleTheme}
           color="inherit"
         >
           {theme.palette.mode === "dark" ? (
-            <Bedtime  sx={{ color: "#FF1100" }}/>
+            <Bedtime sx={{ color: "#FF1100" }} />
           ) : (
             <Brightness4 sx={{ color: "#FF1100" }} />
           )}
         </IconButton>
 
-      {/* 🔹 Theme Toggle (Desktop) */}
+        {/* 🔹 Theme Toggle (Desktop) */}
 
 
 
-      {/* 🔹 Logout Button (Desktop Bottom) */}
-      <Box sx={{}}>
-        <Button
-          onClick={handleLogout}
-          startIcon={<Logout />}
-          fullWidth
-          sx={{
-            color:"white",
-            mb: .5,
-            p:1,
-            px: 2,
-            justifyContent: "flex-start",
-            borderRadius: 2,
-            textTransform: "none",
-            bgcolor: "#FF1100",
-            "&:hover": { backgroundColor: "#E00F00" },
-          }}
-        >
-          Logout
-        </Button>
-      </Box>
+        {/* 🔹 Logout Button (Desktop Bottom) */}
+        <Box sx={{}}>
+          <Button
+            onClick={handleLogout}
+            startIcon={<Logout />}
+            fullWidth
+            sx={{
+              mb: .5,
+              p: 1,
+              px: 2,
+              justifyContent: "flex-start",
+              borderRadius: 2,
+              textTransform: "none",
+              color: theme.palette.mode === "dark" ?  "white" :  "black",
+              border: " 1px solid #FF1100",
+              boxShadow: 2,
+              "&:hover": {
+                backgroundColor: "#FF1100",
+                color: "#fff",
+              },
+            }}
+          >
+            Logout
+          </Button>
+        </Box>
 
-      
+
       </Stack>
 
 

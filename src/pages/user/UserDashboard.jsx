@@ -52,7 +52,7 @@ const UserDashboard = ({ children }) => {
       },
       {
         label: "Order",
-        path: "/order",
+        path: "/my-order",
         icon: <FaClipboardList size={20} />,
       },
       {

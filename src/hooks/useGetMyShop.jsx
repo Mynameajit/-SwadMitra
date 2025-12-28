@@ -17,14 +17,14 @@ const useGetMyShop = () => {
         const res = await axios.get(`${backendURL}/shop/get`, {
           withCredentials: true,
         })
-        console.log(res);
         dispatch(setMyShopData(res.data.shop))
       } catch (error) {
         console.log("shop get", error);
       }
     }
-fetchMyShop()
-  }, [])
+
+      fetchMyShop()
+  }, [userData])
 
 }
 

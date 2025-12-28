@@ -16,10 +16,12 @@ import {
 import { motion } from "framer-motion";
 import Loader from "../components/Loader";
 import AddressCard from "../components/AddressCard";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ArrowBack } from "@mui/icons-material";
 import ShippingDetails from "./ShippingDetails";
 import { useNavigate } from "react-router-dom";
+import { setDeliveryAddress, setTotalAmount } from "../redux/userSlice";
+import toast from "react-hot-toast";
 
 
 
@@ -32,6 +34,7 @@ const OrderSummary = ({
 }) => {
     const theme = useTheme();
     const Navigate = useNavigate()
+    const dispatch = useDispatch()
     const modeBgColor = theme.palette.mode === "light" ? "rgba(250,250,250,.9)" : "rgba(0,0,0,0.8)"
 
 
@@ -77,8 +80,20 @@ const OrderSummary = ({
     };
     const closeEdit = () => setEditOpen(false);
 
-    const onProceedPayment=()=>{
-        Navigate("/payment")
+    const onProceedPayment = () => {
+        if (!selectedAddress) {
+            toast.error("Please select a shipping address");
+            return;
+        }
+        const address = userData?.address.find(add => add._id.toString() === selectedAddress.toString())
+        dispatch(setDeliveryAddress(address))
+        dispatch(setTotalAmount(finalPrice))
+        if (finalPrice && address) {
+            Navigate("/payment")
+        }
+        else {
+            toast.error("Something went wrong. Please try again.")
+        }
     }
 
 
@@ -91,7 +106,6 @@ const OrderSummary = ({
                 sx={{
                     width: "100%",
                     minHeight: "100vh",
-                    bgcolor: theme.palette.mode === "dark" ? "#060b16" : "#fafafa",
                     py: { xs: 2, md: 4 },
                     px: { xs: 1, md: 10 },
                 }}
@@ -245,7 +259,7 @@ const PriceSummaryCard = ({
                 <Row label="Subtotal" value={`₹${subtotal}`} />
                 <Row label="Discount" value={`- ₹${discount}`} color="red" />
                 <Row label="Shipping" value={subtotal < 500 ? `₹${shipping}` : "Free"} />
-                <Row label="plateFromFee" value={`₹${shipping}`} />
+                <Row label="plateFromFee" value={`₹${plateFromFee}`} />
 
                 <Divider sx={{ my: 1 }} />
 

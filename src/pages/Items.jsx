@@ -1,11 +1,11 @@
-import React, { lazy, Suspense, useCallback } from 'react';
+import React, { lazy, Suspense, useCallback, useState } from 'react';
 import { Skeleton, Stack, Typography, useTheme } from '@mui/material';
 import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-import { setCartItems } from '../redux/userSlice';
+import { setCartItems, setLoading } from '../redux/userSlice';
 import { backendURL } from '../App';
 import { burger, cake, dessert, drink, fastFood, noodles, pasta, pizza, sandwich, snacks } from '../utils/imageData';
 import Loader from '../components/Loader';
@@ -31,12 +31,13 @@ export const categories = [
 ];
 
 // Reusable hidden-scrollbar style
-const HIDDEN_SCROLLBAR = {
-    '&::-webkit-scrollbar': { display: 'none' },
-    '-ms-overflow-style': 'none',
-    'scrollbarWidth': 'none',
-    // Smooth touch scrolling on iOS
-    '-webkit-overflow-scrolling': 'touch',
+// ✅ CORRECT
+export const HIDDEN_SCROLLBAR = {
+    msOverflowStyle: 'none',   // IE & Edge
+    scrollbarWidth: 'none',    // Firefox
+    '&::-webkit-scrollbar': {
+        display: 'none',         // Chrome, Safari
+    },
 };
 
 const headingVariant = {
@@ -50,9 +51,12 @@ const Items = () => {
 
     const { itemsData } = useSelector((state) => state.items);
     const { shopInCity, currentCity, userData } = useSelector((state) => state.user);
+    const [loading, setLoading] = useState(false);
+    const [loadingData, setLoadingData] = useState(null);
 
     // Stable handler for adding to cart
     const handelAddCart = useCallback(async (item, qty) => {
+        setLoadingData(item);
 
         if (!userData) return toast.error("Please log in to add items to your cart");
         if (!item) return;
@@ -71,6 +75,7 @@ const Items = () => {
         };
 
         try {
+            setLoading(true);
             const res = await axios.post(`${backendURL}/cart/add`, cartData, { withCredentials: true });
 
             if (res?.data?.success) {
@@ -83,7 +88,12 @@ const Items = () => {
             if (res?.data?.cart) {
                 dispatch(setCartItems(res.data.cart));
             }
+            setLoading(false);
+            setLoadingData(null);
+
         } catch (error) {
+            setLoading(false);
+            setLoadingData(null);
             console.error('Add cart error:', error);
             toast.error('Server error. Try again.');
         }
@@ -135,8 +145,8 @@ const Items = () => {
             </Stack>
 
 
-            <Suspense fallback={<MenuLoader />}>
 
+            <Suspense fallback={<MenuLoader />}>
 
                 {/* Shops heading with motion */}
                 <motion.div initial="hidden" whileInView="visible" variants={headingVariant} viewport={{ once: true }}>
@@ -161,11 +171,12 @@ const Items = () => {
                     gap={{ xs: 1.7, md: 2.5 }}
                     alignItems="center"
                     px={{ xs: 1, md: 2 }}
+                    justifyContent={{ xs: 'start', md: 'center' }}
                     py={3}
                     sx={{ overflowX: 'auto', ...HIDDEN_SCROLLBAR }}
                 >
                     {Array.isArray(shopInCity) && shopInCity.map((shop, idx) => (
-                        <ShopCard key={shop._id || shop.id || idx} shop={shop} i={idx} />
+                        <ShopCard key={idx} shop={shop} i={idx} />
                     ))}
                 </Stack>
 
@@ -197,11 +208,13 @@ const Items = () => {
                                 handelAddCart={handelAddCart}
                                 item={item}
                                 i={propIndex}
+                                loading={loading}
+                                loadingData={loadingData}
                             />
                         );
                     })}
                 </Stack>
-                
+
             </Suspense>
 
         </Stack>

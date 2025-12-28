@@ -13,6 +13,7 @@ const useGetCartItems = () => {
             try {
                 const res = await axios.get(`${backendURL}/cart/get`, { withCredentials: true })
                 dispatch(setCartItems(res?.data.cart[0]))
+                
             } catch (error) {
                 console.log(error);
             }

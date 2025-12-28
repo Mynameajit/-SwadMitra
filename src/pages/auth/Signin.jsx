@@ -60,52 +60,35 @@ const AnimatedBox = ({ delay, children }) => (
 
 // ---------- Main Component ----------
 const SignIn = () => {
+
   const Navigate = useNavigate();
   const theme = useTheme();
-  const dispatch = useDispatch()
 
   const [showPassword, setShowPassword] = useState(false);
-  const [isGmailOTP, setIsGmailOTP] = useState(false);
-  const [isSendOtp, setIsSendOtp] = useState(false);
   const [loading, setLoading] = useState(false);
-
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [otp, setOtp] = useState("");
   const [selected, setSelected] = useState("user");
-
-
-  // Toggle between Gmail OTP and Email/Password Sign In
-  const handleToggleSignInMethod = () => {
-    setIsGmailOTP((prev) => !prev);
-    setIsSendOtp(false);
-    setEmail("");
-    setPassword("");
-    setOtp("");
-    setLoading(false)
-  };
 
 
   //  Signin email and password handler
   const handleSignIn = async () => {
-    setLoading(true)
     try {
+      setLoading(true)
       if (!email || !password) {
-        toast.error("Please Enter The Email and Password")
-        return
+        return toast.error("Please Enter The Email and Password")
       }
       if (!selected) {
-        console.log("Please select a role");
+        return toast.error("Please select a role");
       }
       //signin user logic here
       const { data } = await axios.post(`${backendURL}/auth/signin`, { email, password, role: selected }, {
         withCredentials: true,
       });
-      dispatch(setUserData(data?.data?.user))
-      toast.success(data?.data?.message || "Signed in successfully");
       setLoading(false)
       window.location.reload()
+      
       if (data.user.role === "owner") Navigate("/owner/dashboard");
       else if (data.user.role.role === "delivery") Navigate("/delivery/dashboard");
       else Navigate("/");
@@ -114,26 +97,9 @@ const SignIn = () => {
       setLoading(false)
       toast.error(error?.response.data?.message || "Something went wrong during sign in");
       console.log("error for signin", error)
+    }finally{
+      setLoading(false)
     }
-
-  };
-
-  //  send otp handler
-  const handlerSendOtp = () => {
-    console.log("Send OTP clicked");
-    if (email === "") {
-      toast.error("Please enter your email address to receive OTP.");
-      return
-    }
-    setIsSendOtp(true);
-  };
-
-  // verify otp handler
-  const handlerVerifyOtp = () => {
-    if (!otp) {
-      return toast.error("Please Enter the Opt")
-    }
-    console.log("Verify OTP clicked");
 
   };
 
@@ -204,7 +170,7 @@ const SignIn = () => {
               {/* ---------- Headings ---------- */}
               <AnimatedBox delay={0.4}>
                 <Typography component="h1" variant="h6" align="center" sx={{ color: "#FF1100" }}>
-                  {isGmailOTP ? "Sign In with Gmail OTP" : "Welcome Back"}
+                  Welcome Back
                 </Typography>
 
                 <Typography
@@ -218,9 +184,7 @@ const SignIn = () => {
                   }}
                   align="center"
                 >
-                  {isGmailOTP
-                    ? "Enter the OTP sent to your Gmail to continue 🚀"
-                    : "Sign in using Gmail & password 🚀"}
+                  Sign in using Gmail & password 🚀
                 </Typography>
               </AnimatedBox>
 
@@ -228,37 +192,7 @@ const SignIn = () => {
               <Box component="form" noValidate sx={{ mt: 1, width: "100%" }}>
 
                 {/* Password Field (only if Gmail OTP is not active) */}
-                {isGmailOTP ? (
-                  <>
-                    <InputField
-                      label=" Enter Email Address"
-                      name="email"
-                      type="email"
-                      InputIcon={Email}
-                      delay={0.4}
-                      value={email}
-                      required={true}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                    {
-                      isSendOtp && (
-
-                        <InputField
-                          label="Enter OTP`"
-                          name="otp"
-                          type="number"
-                          InputIcon={ChatBubbleOutline}
-                          delay={0.4}
-                          value={otp}
-                          onChange={(e) => setOtp(e.target.value)}
-                        />
-
-                      )
-                    }
-                  </>
-
-                ) : (
-                  <>
+                
                     <InputField
                       label="Email Address"
                       name="email"
@@ -279,9 +213,7 @@ const SignIn = () => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                     />
-                  </>
-                )
-                }
+               
 
                 {/* ---------- Role ---------- */}
                 <AnimatedBox delay={0.7}>
@@ -290,13 +222,10 @@ const SignIn = () => {
                 </AnimatedBox>
 
 
-                {/* ---------- Sign In / Send OTP Button ---------- */}
                 <AnimatedBox delay={0.8}>
                   <Button
                     onClick={handleSignIn}
                     disabled={loading ? true : false}
-                    // onClick={isGmailOTP ? isSendOtp ? handlerVerifyOtp : handlerSendOtp : handleSignIn}
-                    // disabled={isSendOtp ? otp.length < 4 ? true : false : false}
                     fullWidth
                     variant="contained"
                     sx={{
@@ -338,44 +267,6 @@ const SignIn = () => {
                     or
                   </Typography>
                 </AnimatedBox>
-
-                {/* ---------- Gmail OTP Toggle Button ---------- */}
-                {/* <AnimatedBox delay={1}>
-                  <Button
-                    type="button"
-                    fullWidth
-                    variant="contained"
-                    onClick={handleToggleSignInMethod}
-                    sx={{
-                      mt: 2,
-                      mb: 1,
-                      py: 1,
-                      borderRadius: 2,
-                      fontWeight: "bold",
-                      fontSize: "14px",
-                      textTransform: "none",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 1,
-                      background: gmailGradient,
-                      "&:hover": { background: gmailHoverGradient },
-                    }}
-                  >
-
-
-                    {isGmailOTP
-                      ? <TbPasswordMobilePhone size={24} color="blue" />
-                      : <BiLogoGmail size={24} color="orange" />}
-                    {isGmailOTP
-                      ? "Sign In with Gmail and Password"
-                      : "Sign In with Gmail OTP"}
-
-
-
-                  </Button>
-                </AnimatedBox>
- */}
-
 
 
                 {/* ---------- Sign In with google ---------- */}

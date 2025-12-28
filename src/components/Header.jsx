@@ -18,19 +18,15 @@ import {
   ShoppingCart,
   Place,
   ArrowBack,
-  Person,
-  Logout,
   Search,
 } from "@mui/icons-material";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
 
-import { backendURL } from "../App";
-import { setUserData } from "../redux/userSlice";
 import useScrollPosition from "../hooks/useScrollPosition";
 import { useThemeMode } from "../context/ThemeModeProvider ";
 import Logo from "./Logo";
+import { FaClipboardList } from "react-icons/fa6";
 
 // ----------------------
 // Styled Badge
@@ -52,8 +48,6 @@ const Header = () => {
 
   const { userData, currentCity, cartItems } = useSelector((s) => s.user);
 
-  const [anchorEl, setAnchorEl] = useState(null);
-  const openMenu = Boolean(anchorEl);
 
   const totalItems = cartItems?.items?.length || 0;
 
@@ -69,25 +63,15 @@ const Header = () => {
           <ShoppingCart />
         </StyledBadge>
       ),
+
     },
+    { label: "Order", path: "/my-order", icon: <FaClipboardList size={20} /> },
   ];
 
   // ---------- go to profile ----------
   const handleProfile = () => {
-    setAnchorEl(null)
     navigate("/profile")
   }
-
-  // ---------- Logout ----------
-  const handleLogout = async () => {
-    try {
-      await axios.post(`${backendURL}/auth/signout`, {}, { withCredentials: true });
-      dispatch(setUserData(null));
-      navigate("/");
-    } catch (err) {
-      console.log("Logout error:", err);
-    }
-  };
 
   const pageTitle =
     location.pathname === "/"
@@ -105,9 +89,11 @@ const Header = () => {
     location.pathname === shippingDetails ||
     location.pathname === payment ||
     location.pathname === signin ||
-    location.pathname === signup 
+    location.pathname === signup
   );
   // ===========================================================
+
+
   //                      JSX START
   // ===========================================================
   return (
@@ -261,7 +247,7 @@ const Header = () => {
             {userData ? (
               <>
                 <IconButton
-                  onClick={(e) => setAnchorEl(e.currentTarget)}
+                  onClick={handleProfile}
                   sx={{
                     background: "#FF1100",
                     color: "white",
@@ -275,27 +261,6 @@ const Header = () => {
                   {userData.fullName.slice(0, 1)}
                 </IconButton>
 
-                {/* Profile Menu */}
-                <Menu
-                  anchorEl={anchorEl}
-                  open={openMenu}
-                  onClose={() => setAnchorEl(null)}
-                  PaperProps={{
-                    sx: {
-                      borderRadius: 2,
-                      minWidth: 170,
-                      boxShadow: "0 6px 18px rgba(0,0,0,0.15)",
-                    },
-                  }}
-                >
-                  <MenuItem onClick={handleProfile}>
-                    <Person sx={{ mr: 1 }} /> Profile
-                  </MenuItem>
-
-                  <MenuItem onClick={handleLogout}>
-                    <Logout sx={{ mr: 1 }} /> Logout
-                  </MenuItem>
-                </Menu>
               </>
             ) : (
               <Button

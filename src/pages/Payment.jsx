@@ -8,16 +8,76 @@ import {
     useTheme,
     Paper,
     IconButton,
+    CircularProgress,
 } from "@mui/material";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import PaymentButton from "../components/payment/PaymentButton";
 import { useNavigate } from "react-router-dom";
 import { ArrowBack } from "@mui/icons-material";
 import { motion } from "framer-motion";
+import { handlePayment } from "../components/payment/PaymentButton.jsx";
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { handlePlaceOrder } from "../service/handlePlaceOrder.jsx";
+import { useEffect } from "react";
+import { setCartItems, setMyOrders } from "../redux/userSlice.js";
+import { useState } from "react";
+import axios from "axios";
+import { backendURL } from "../App.jsx";
 
 const Payment = () => {
     const theme = useTheme();
     const Navigate = useNavigate()
+    const dispatch = useDispatch()
+    const { userData, cartItems, deliveryAddress, totalAmount } = useSelector(state => state.user)
+    const [loading, setIsLoading] = useState(false)
+
+    useEffect(() => {
+        if (deliveryAddress == null || totalAmount == null || cartItems == null) {
+            Navigate("/order-summary", { replace: true });
+        }
+    }, [userData, cartItems, deliveryAddress, totalAmount, Navigate])
+
+
+    const clearCartItemsHandle = async (req, res) => {
+        try {
+            const res = await axios.post(`${backendURL}/cart/clear`, {}, {
+                withCredentials: true
+            })
+            if (res.data.success) {
+                dispatch(setCartItems(null))
+            }
+        } catch (error) {
+            console.log("clear cartItems", error);
+
+        }
+    }
+
+    const handleOrder = async (method) => {
+
+        if (method === "ONLINE") {
+            handlePayment()
+        }
+
+        if (method === "COD") {
+
+            const res = await handlePlaceOrder({
+                user: userData,
+                paymentMethod: method,
+                deliveryAddress,
+                totalAmount,
+                cartItems: cartItems.items,
+                setIsLoading
+            })
+            dispatch(setMyOrders(res?.data?.orders))
+            await clearCartItemsHandle()
+            
+            if (res.data) {
+                Navigate('/Order-Confirmed');
+            }
+        }
+
+    }
+
     return (
         <Box
             sx={{
@@ -95,10 +155,14 @@ const Payment = () => {
 
                         {/* ONLINE PAYMENT */}
                         <Box>
-                            <Typography fontWeight={600} mb={1}>
-                                Pay Online (Recommended)
-                            </Typography>
-                            <PaymentButton amount={500} />
+                            <Button
+                                fullWidth
+                                onClick={() => handleOrder("ONLINE")}
+                                variant="contained"
+                                sx={{ backgroundColor: "#FF1100" }}
+                            >
+                                Pay ₹{500} Now
+                            </Button>
                         </Box>
 
                         <Divider />
@@ -109,10 +173,11 @@ const Payment = () => {
                                 Cash on Delivery
                             </Typography>
                             <Button
+                                disabled={loading}
                                 fullWidth
                                 size="large"
                                 variant="outlined"
-                                startIcon={<LocalShippingIcon />}
+                                startIcon={loading ? "" : <LocalShippingIcon />}
                                 sx={{
                                     py: 1.6,
                                     borderRadius: 2.5,
@@ -123,9 +188,14 @@ const Payment = () => {
                                         backgroundColor: "rgba(255,17,0,0.08)",
                                     },
                                 }}
-                                onClick={() => alert("COD Order Placed")}
+                                onClick={() => handleOrder("COD")}
                             >
-                                Pay When Order Arrives
+                                {
+                                    loading ? (
+                                        <CircularProgress size={25} />
+                                    ) : " Pay When Order Arrives"
+                                }
+
                             </Button>
                         </Box>
                     </Stack>
@@ -152,7 +222,7 @@ const Payment = () => {
                         </Typography>
 
                         <Stack spacing={1.5}>
-                            <Stack direction="row" justifyContent="space-between">
+                            {/* <Stack direction="row" justifyContent="space-between">
                                 <Typography>Items Total</Typography>
                                 <Typography>₹500</Typography>
                             </Stack>
@@ -160,12 +230,12 @@ const Payment = () => {
                             <Stack direction="row" justifyContent="space-between">
                                 <Typography>Delivery Charges</Typography>
                                 <Typography color="green">FREE</Typography>
-                            </Stack>
+                            </Stack> */}
 
                             <Divider />
 
                             <Stack direction="row" justifyContent="space-between">
-                                <Typography fontWeight={700}>Total Payable</Typography>
+                                <Typography fontWeight={700}>Total Amount</Typography>
                                 <Typography fontWeight={700} color="#FF1100">
                                     ₹500
                                 </Typography>

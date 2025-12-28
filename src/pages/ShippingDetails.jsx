@@ -41,7 +41,7 @@ const ShippingDetails = () => {
   const [city, setCity] = useState("")
   const [pinCode, setPinCode] = useState("")
   const [buildingName, setBuildingName] = useState("")
-  const [landMark, setLandMark] = useState("")
+  const [landmark, setLandmark] = useState("")
   const [isLocation, setIsLocation] = useState("home")
 
   const [loading, setLoading] = useState(false)
@@ -62,7 +62,7 @@ const ShippingDetails = () => {
         state,
         buildingName,
         pinCode,
-        landMark,
+        landmark,
         isLocation
       }
 
@@ -216,8 +216,8 @@ const ShippingDetails = () => {
               type={"text"}
               width='100%'
               custom={1}
-              value={landMark}
-              onChange={(e) => setLandMark(e.target.value)}
+              value={landmark}
+              onChange={(e) => setLandmark(e.target.value)}
             />
           </Stack>
 

@@ -38,8 +38,9 @@ const ShopCard = ({ shop = {}, i = 0, onClick } = {}) => {
       role="button"
       aria-label={`Open shop ${shop?.name || "shop"}`}
       sx={{
-        width: 112, // 7rem ~ 112px
-        height: 128, // slightly taller so image looks nice
+        minWidth: { xs: 132, sm: 132, md: 132 }, // fixed card width
+        flexShrink: 0,
+        height: 132, // slightly taller so image looks nice
         borderRadius: 2,
         overflow: "hidden",
         position: "relative",

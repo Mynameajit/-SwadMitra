@@ -120,8 +120,8 @@ const AddShop = () => {
 
                     <Stack width={"100%"} gap={1} sx={{}}>
                         <AddShopInput
-                            label={"Name:"}
-                            placeholder={"Enter your name"}
+                            label={"Shop Name:"}
+                            placeholder={"Enter your ShopName"}
                             type={"text"}
                             width='100%'
                             custom={0.3}

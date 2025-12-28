@@ -5,9 +5,6 @@ import { useDispatch } from "react-redux";
 import { setUserData } from "../redux/userSlice";
 
 const useGetCurrentUser = () => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   const dispatch=useDispatch()
 
@@ -20,14 +17,11 @@ const useGetCurrentUser = () => {
         dispatch(setUserData(res.data.user))
       } catch (err) {
         console.error("Error fetching user:", err);
-        setError(err);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchUser();
-  }, [user]);
+  }, []);
 
   // return { user, loading, error };
 };

@@ -46,11 +46,18 @@ import Items from "./pages/Items.jsx";
 import OwnerDashboard from "./pages/owner/OwnerDashboard.jsx";
 import UserDashboard from "./pages/user/UserDashboard.jsx";
 import Hero from "./pages/user/Hero.jsx";
+import { useSelector } from "react-redux";
+import useGetMyOrders from "./hooks/useGetMyOrders.jsx";
+import MyOrders from "./pages/MyOrders.jsx";
+import OrderConfirmed from "./pages/OrderConfirmed.jsx";
 
 /* Backend URL (Vercel-safe) */
-export const backendURL =import.meta.env.VITE_BACKEND_URL || "http://localhost:8080/api";
+export const backendURL = `${import.meta.env.VITE_BACKEND_URL}/api`;
 
 function App() {
+  const { shopInCity } = useSelector(state => state.user)
+  const { itemsData } = useSelector(state => state.items)
+
   useGetCurrentUser();
   useGetCity();
   useGetMyShop();
@@ -58,6 +65,7 @@ function App() {
   useGetShopByCity();
   useGetItemsInCity();
   useGetCartItems();
+  useGetMyOrders()
 
   return (
     <>
@@ -73,69 +81,80 @@ function App() {
           <BackgroundCircles />
         </Suspense>
       </Box>
-     
 
-      <Suspense fallback={<Loader />}>
-        <Routes>
-            <Route path="/" element={ <Home />} />
-          {/* User layout */}
-          <Route element={<UserDashboard />}>
-            <Route path="/" element={<Hero />} />
-            <Route path="menu" element={<Items />} />
-          </Route>
+      {
+        itemsData === null && shopInCity === null ? (
+          <Loader />
+        ) : (
 
-          {/* Protected user routes */}
-          <Route
-            element={
-              <ProtectedRoute isProtected={true}>
-                <UserDashboard />
-              </ProtectedRoute>
-            }
-          >
-            <Route path="cart" element={<Cart />} />
-            <Route path="order-summary" element={<OrderSummary />} />
-            <Route path="shipping-details" element={<ShippingDetails />} />
-            <Route path="payment" element={<Payment />} />
-            <Route path="profile" element={<UserProfile />} />
-          </Route>
 
-          {/* Owner */}
-          <Route
-            element={
-              <ProtectedRoute isProtected={true}>
-                <OwnerDashboard />
-              </ProtectedRoute>
-            }
-          >
-            <Route path="owner/dashboard" element={<OwnerHome />} />
-            <Route path="owner/orders" element={<Orders />} />
-            <Route path="owner/add-item" element={<AddItems />} />
-            <Route path="owner/items" element={<OwnerItems />} />
-            <Route path="owner/profile" element={<OwnerProfile />} />
-          </Route>
 
-          {/* Auth */}
-          <Route
-            path="signin"
-            element={
-              <ProtectedRoute isProtected={false}>
-                <SignIn />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="signup"
-            element={
-              <ProtectedRoute isProtected={false}>
-                <Signup />
-              </ProtectedRoute>
-            }
-          />
+          <Suspense fallback={<Loader />}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              {/* User layout */}
+              <Route element={<UserDashboard />}>
+                <Route path="/" element={<Hero />} />
+                <Route path="menu" element={<Items />} />
+              </Route>
 
-          {/* 404 */}
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </Suspense>
+              {/* Protected user routes */}
+              <Route
+                element={
+                  <ProtectedRoute isProtected={true}>
+                    <UserDashboard />
+                  </ProtectedRoute>
+                }
+              >
+                <Route path="cart" element={<Cart />} />
+                <Route path="order-summary" element={<OrderSummary />} />
+                <Route path="shipping-details" element={<ShippingDetails />} />
+                <Route path="payment" element={<Payment />} />
+                <Route path="profile" element={<UserProfile />} />
+                <Route path="my-order" element={<MyOrders />} />
+                <Route path="Order-Confirmed" element={<OrderConfirmed />} />
+              </Route>
+
+              {/* Owner */}
+              <Route
+                element={
+                  <ProtectedRoute isProtected={true}>
+                    <OwnerDashboard />
+                  </ProtectedRoute>
+                }
+              >
+                <Route path="owner/dashboard" element={<OwnerHome />} />
+                <Route path="owner/orders" element={<Orders />} />
+                <Route path="owner/add-item" element={<AddItems />} />
+                <Route path="owner/items" element={<OwnerItems />} />
+                <Route path="owner/profile" element={<OwnerProfile />} />
+              </Route>
+
+              {/* Auth */}
+              <Route
+                path="signin"
+                element={
+                  <ProtectedRoute isProtected={false}>
+                    <SignIn />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="signup"
+                element={
+                  <ProtectedRoute isProtected={false}>
+                    <Signup />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* 404 */}
+              <Route path="*" element={<PageNotFound />} />
+            </Routes>
+          </Suspense>
+
+        )
+      }
     </>
   );
 }
