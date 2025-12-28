@@ -7,39 +7,26 @@ import Loader from "./components/Loader.jsx";
 /* Pages */
 import Home from "./pages/Home.jsx";
 
-<<<<<<< HEAD
-/* Auth */
-=======
-
-
->>>>>>> 17a345bc6c21432224adbaab01c3635c18c96083
 const SignIn = lazy(() => import("./pages/auth/Signin.jsx"));
 const Signup = lazy(() => import("./pages/auth/Signup.jsx"));
 
-/* Owner */
-<<<<<<< HEAD
 
-=======
 const OwnerDashboard = lazy(() =>
   import("./pages/owner/OwnerDashboard.jsx")
 );
->>>>>>> 17a345bc6c21432224adbaab01c3635c18c96083
 const OwnerHome = lazy(() => import("./pages/owner/OwnerHome.jsx"));
 const OwnerProfile = lazy(() => import("./pages/owner/OwnerProfile.jsx"));
 const Orders = lazy(() => import("./pages/owner/Orders.jsx"));
 const AddItems = lazy(() => import("./pages/owner/AddItem.jsx"));
 const OwnerItems = lazy(() => import("./pages/owner/OwnerItems.jsx"));
 
-/* User */
-<<<<<<< HEAD
 
-=======
 const UserDashboard = lazy(() =>
   import("./pages/user/UserDashboard.jsx")
 );
 const Hero = lazy(() => import("./pages/user/Hero.jsx"));
 const Items = lazy(() => import("./pages/Items.jsx"));
->>>>>>> 17a345bc6c21432224adbaab01c3635c18c96083
+
 const Cart = lazy(() => import("./pages/Cart.jsx"));
 const OrderSummary = lazy(() => import("./pages/OrderSummary.jsx"));
 const UserProfile = lazy(() => import("./pages/user/Profile.jsx"));
@@ -74,12 +61,9 @@ import OrderConfirmed from "./pages/OrderConfirmed.jsx";
 export const backendURL = `${import.meta.env.VITE_BACKEND_URL}/api`;
 
 function App() {
-<<<<<<< HEAD
   const { shopInCity } = useSelector(state => state.user)
   const { itemsData } = useSelector(state => state.items)
 
-=======
->>>>>>> 17a345bc6c21432224adbaab01c3635c18c96083
   useGetCurrentUser();
   useGetCity();
   useGetMyShop();
@@ -104,7 +88,6 @@ function App() {
         </Suspense>
       </Box>
 
-<<<<<<< HEAD
       {
         itemsData === null && shopInCity === null ? (
           <Loader />
@@ -239,7 +222,6 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Suspense>
->>>>>>> 17a345bc6c21432224adbaab01c3635c18c96083
     </>
   );
 }
