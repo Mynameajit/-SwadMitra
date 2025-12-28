@@ -29,7 +29,11 @@ const Items = lazy(() => import("./pages/Items.jsx"));
 
 const Cart = lazy(() => import("./pages/Cart.jsx"));
 const OrderSummary = lazy(() => import("./pages/OrderSummary.jsx"));
+const ShippingDetails = lazy(() => import("./pages/ShippingDetails.jsx"));
+const OrderConfirmed = lazy(() => import("./pages/OrderConfirmed.jsx"));
 const UserProfile = lazy(() => import("./pages/user/Profile.jsx"));
+const MyOrders = lazy(() => import("./pages/MyOrders.jsx"));
+const Payment = lazy(() => import("./pages/Payment.jsx"));
 
 const PageNotFound = lazy(() => import("./pages/PageNotFound.jsx"));
 
@@ -45,17 +49,9 @@ import useGetItems from "./hooks/useGetItems.jsx";
 import useGetShopByCity from "./hooks/useGetShopByCity.jsx";
 import useGetItemsInCity from "./hooks/useGetItemsInCity.jsx";
 import useGetCartItems from "./hooks/useGetCartItems.jsx";
-
-import ShippingDetails from "./pages/ShippingDetails.jsx";
-import Payment from "./pages/Payment.jsx";
-import Items from "./pages/Items.jsx";
-import OwnerDashboard from "./pages/owner/OwnerDashboard.jsx";
-import UserDashboard from "./pages/user/UserDashboard.jsx";
-import Hero from "./pages/user/Hero.jsx";
-import { useSelector } from "react-redux";
 import useGetMyOrders from "./hooks/useGetMyOrders.jsx";
-import MyOrders from "./pages/MyOrders.jsx";
-import OrderConfirmed from "./pages/OrderConfirmed.jsx";
+
+import { useSelector } from "react-redux";
 
 /* Backend URL (Vercel-safe) */
 export const backendURL = `${import.meta.env.VITE_BACKEND_URL}/api`;
@@ -161,7 +157,6 @@ function App() {
 
         )
       }
-=======
       <Suspense fallback={<Loader />}>
         <Routes>
           <Route path="/" element={<Home />} />
