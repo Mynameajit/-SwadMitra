@@ -87,11 +87,11 @@ const SignIn = () => {
         withCredentials: true,
       });
       setLoading(false)
-      window.location.reload()
       
       if (data.user.role === "owner") Navigate("/owner/dashboard");
       else if (data.user.role.role === "delivery") Navigate("/delivery/dashboard");
       else Navigate("/");
+      window.location.reload()
 
     } catch (error) {
       setLoading(false)
