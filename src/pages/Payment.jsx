@@ -72,6 +72,7 @@ const Payment = () => {
             await clearCartItemsHandle()
             
             if (res.data) {
+                 window.location.reload()
                 Navigate('/Order-Confirmed');
             }
         }
