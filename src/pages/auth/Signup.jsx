@@ -31,6 +31,7 @@ import { FcGoogle } from "react-icons/fc";
 import { InputField } from "../../components/auth/InputField";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
+import { setUserData } from "../../redux/userSlice";
 
 
 
@@ -58,7 +59,7 @@ const AnimatedBox = ({ delay, children }) => (
 
 
 // ---------- Main Component ----------
-const SignUp = () => {
+const Signup = () => {
   const dispatch = useDispatch()
   const Navigate = useNavigate();
   const theme = useTheme()
@@ -86,18 +87,18 @@ const SignUp = () => {
       const res = await axios.post(`${backendURL}/auth/signup`, { fullName: fullname, email, password, role: "user" }, {
         withCredentials: true,
       });
-       dispatch(setUserData(res?.data?.user))
-      
-      toast.success(res?.data.message || "Signup Successful")
+      dispatch(setUserData(res?.data?.user))
+      toast.success(res?.data?.message || "Signup Successful");
       Navigate('/');
       setLoading(false)
 
 
     } catch (error) {
+      console.log(error);
       setLoading(false)
       toast.error(error?.response?.data?.message || "Signup Failed")
     }
-  }
+  } 
 
   return (
     <Box sx={{ position: "relative", height: "100vh" }}>
@@ -222,7 +223,7 @@ const SignUp = () => {
                 {/* Sign In Button */}
                 <AnimatedBox delay={.8}>
                   <Button
-                      disabled={loading ? true : false}
+                    disabled={loading ? true : false}
                     onClick={handleSignup}
                     fullWidth
                     variant="contained"
@@ -309,4 +310,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Signup;
