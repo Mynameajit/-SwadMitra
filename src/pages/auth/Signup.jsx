@@ -58,7 +58,7 @@ const AnimatedBox = ({ delay, children }) => (
 
 
 // ---------- Main Component ----------
-const SignIn = () => {
+const SignUp = () => {
   const dispatch = useDispatch()
   const Navigate = useNavigate();
   const theme = useTheme()
@@ -86,11 +86,9 @@ const SignIn = () => {
       const res = await axios.post(`${backendURL}/auth/signup`, { fullName: fullname, email, password, role: "user" }, {
         withCredentials: true,
       });
-      // dispatch(setUserData(res?.data?.user))
-      console.log(res.data);
+       dispatch(setUserData(res?.data?.user))
       
       toast.success(res?.data.message || "Signup Successful")
-      window.location.reload()
       Navigate('/');
       setLoading(false)
 
@@ -311,4 +309,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SignUp;
