@@ -60,7 +60,7 @@ const AnimatedBox = ({ delay, children }) => (
 
 // ---------- Main Component ----------
 const SignIn = () => {
-
+  const dispatch = useDispatch();
   const Navigate = useNavigate();
   const theme = useTheme();
 
@@ -87,17 +87,18 @@ const SignIn = () => {
         withCredentials: true,
       });
       setLoading(false)
-      
+      dispatch(setUserData(data.user))
+      toast.success(data?.message || "Sign In Successful");
+
       if (data.user.role === "owner") Navigate("/owner/dashboard");
       else if (data.user.role.role === "delivery") Navigate("/delivery/dashboard");
       else Navigate("/");
-    
 
     } catch (error) {
       setLoading(false)
       toast.error(error?.response.data?.message || "Something went wrong during sign in");
       console.log("error for signin", error)
-    }finally{
+    } finally {
       setLoading(false)
     }
 
@@ -192,28 +193,28 @@ const SignIn = () => {
               <Box component="form" noValidate sx={{ mt: 1, width: "100%" }}>
 
                 {/* Password Field (only if Gmail OTP is not active) */}
-                
-                    <InputField
-                      label="Email Address"
-                      name="email"
-                      type="email"
-                      InputIcon={Email}
-                      delay={0.4}
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <InputField
-                      label="Password"
-                      name="password"
-                      type={showPassword ? "text" : "password"}
-                      showPassword={showPassword}
-                      InputIcon={showPassword ? VisibilityOff : Visibility}
-                      delay={0.6}
-                      togglePassword={togglePassword}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-               
+
+                <InputField
+                  label="Email Address"
+                  name="email"
+                  type="email"
+                  InputIcon={Email}
+                  delay={0.4}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <InputField
+                  label="Password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  showPassword={showPassword}
+                  InputIcon={showPassword ? VisibilityOff : Visibility}
+                  delay={0.6}
+                  togglePassword={togglePassword}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+
 
                 {/* ---------- Role ---------- */}
                 <AnimatedBox delay={0.7}>
