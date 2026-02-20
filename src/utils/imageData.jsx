@@ -10,8 +10,8 @@ import fastFood from "../assets/image/fast-food.jpg";
 import noodles from "../assets/image/noodles.jpg";
 import pasta from "../assets/image/pasta.jpg";
 import pizza from "../assets/image/pizza.jpg";
-import sandwich from "../assets/image/sandwich.jpg";
-import snacks from "../assets/image/snacks.jpg";
+import sandwich from "../assets/image/Sandwich.jpg";
+import snacks from "../assets/image/Snacks.jpg";
 
 
 

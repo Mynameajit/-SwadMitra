@@ -1,229 +1,89 @@
-// App.jsx
-import React, { Suspense, lazy } from "react";
-import { Routes, Route } from "react-router-dom";
-import { Box } from "@mui/material";
-import Loader from "./components/Loader.jsx";
+import { Routes, Route, Outlet } from "react-router-dom";
+import Navbar from "./components/common/Navbar";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+import { useDispatch, useSelector } from "react-redux";
+import { Suspense, useEffect } from "react";
+import { fetchUser } from "./features/auth/authService";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import Loader from "./components/common/Loader";
+import Home from "./pages/home/Home";
+import UserLayout from "./pages/UserLayouts";
+import PublicRoute from "./routes/PublicRoute";
+import Menus from "./pages/menu/Menus";
+import { fetchMenus } from "./features/menu/MenuService";
+import Profile from "./pages/profile/Profile"
+import { fetchToCart } from "./features/cart/cartService";
+import Cart from "./pages/cart/Cart";
+import OrderSummary from "./pages/cart/OrderSummary";
+import AddressForm from "./components/address/AddressForm";
+import CartItemLoader from "./components/cart/CartItemLoader";
+import ShippingAddressPage from "./pages/cart/ShippingAddress";
+import { fetchUserOrders } from "./features/order/orderService";
+import MyOrders from "./pages/order/MyOrders";
 
 /* Pages */
-import Home from "./pages/Home.jsx";
 
-const SignIn = lazy(() => import("./pages/auth/Signin.jsx"));
-const Signup = lazy(() => import("./pages/auth/Signup.jsx"));
-
-
-const OwnerDashboard = lazy(() =>
-  import("./pages/owner/OwnerDashboard.jsx")
-);
-const OwnerHome = lazy(() => import("./pages/owner/OwnerHome.jsx"));
-const OwnerProfile = lazy(() => import("./pages/owner/OwnerProfile.jsx"));
-const Orders = lazy(() => import("./pages/owner/Orders.jsx"));
-const AddItems = lazy(() => import("./pages/owner/AddItem.jsx"));
-const OwnerItems = lazy(() => import("./pages/owner/OwnerItems.jsx"));
+const App = () => {
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.user);
 
 
-const UserDashboard = lazy(() =>
-  import("./pages/user/UserDashboard.jsx")
-);
-const Hero = lazy(() => import("./pages/user/Hero.jsx"));
-const Items = lazy(() => import("./pages/Items.jsx"));
 
-const Cart = lazy(() => import("./pages/Cart.jsx"));
-const OrderSummary = lazy(() => import("./pages/OrderSummary.jsx"));
-const UserProfile = lazy(() => import("./pages/user/Profile.jsx"));
+  useEffect(() => {
+    dispatch(fetchUser());
+    dispatch(fetchMenus());
+    dispatch(fetchUserOrders());
 
-const PageNotFound = lazy(() => import("./pages/PageNotFound.jsx"));
+  }, [dispatch]);
 
-/* Utilities */
-const BackgroundCircles = lazy(() => import("./utils/Background.jsx"));
-import ProtectedRoute from "./utils/ProtectedRoute.jsx";
 
-/* Hooks */
-import useGetCurrentUser from "./hooks/UseGetCurrentUser.jsx";
-import useGetCity from "./hooks/useGetCity.jsx";
-import useGetMyShop from "./hooks/useGetMyShop.jsx";
-import useGetItems from "./hooks/useGetItems.jsx";
-import useGetShopByCity from "./hooks/useGetShopByCity.jsx";
-import useGetItemsInCity from "./hooks/useGetItemsInCity.jsx";
-import useGetCartItems from "./hooks/useGetCartItems.jsx";
-
-import ShippingDetails from "./pages/ShippingDetails.jsx";
-import Payment from "./pages/Payment.jsx";
-import Items from "./pages/Items.jsx";
-import OwnerDashboard from "./pages/owner/OwnerDashboard.jsx";
-import UserDashboard from "./pages/user/UserDashboard.jsx";
-import Hero from "./pages/user/Hero.jsx";
-import { useSelector } from "react-redux";
-import useGetMyOrders from "./hooks/useGetMyOrders.jsx";
-import MyOrders from "./pages/MyOrders.jsx";
-import OrderConfirmed from "./pages/OrderConfirmed.jsx";
-
-/* Backend URL (Vercel-safe) */
-export const backendURL = `${import.meta.env.VITE_BACKEND_URL}/api`;
-
-function App() {
-  const { shopInCity } = useSelector(state => state.user)
-  const { itemsData } = useSelector(state => state.items)
-
-  useGetCurrentUser();
-  useGetCity();
-  useGetMyShop();
-  useGetItems();
-  useGetShopByCity();
-  useGetItemsInCity();
-  useGetCartItems();
-  useGetMyOrders()
+  if (loading.profile) {
+    return <Loader />;
+  }
 
   return (
-    <>
-      <Box
-        sx={{
-          position: "fixed",
-          inset: 0,
-          zIndex: 0,
-          pointerEvents: "none",
-        }}
-      >
-        <Suspense fallback={null}>
-          <BackgroundCircles />
-        </Suspense>
-      </Box>
+    <Suspense fallback={<Loader />}>
+      <Routes>
+        {/* PUBLIC ROUTES */}
+        <Route element={<UserLayout />}>
+          <Route index element={<Home />} />
+          <Route path="/menu" element={<Menus />} />
+        </Route>
 
-      {
-        itemsData === null && shopInCity === null ? (
-          <Loader />
-        ) : (
+        {/* Auth ROUTES */}
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <PublicRoute>
+              <Register />
+            </PublicRoute>
+          }
+        />
 
-
-
-          <Suspense fallback={<Loader />}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              {/* User layout */}
-              <Route element={<UserDashboard />}>
-                <Route path="/" element={<Hero />} />
-                <Route path="menu" element={<Items />} />
-              </Route>
-
-              {/* Protected user routes */}
-              <Route
-                element={
-                  <ProtectedRoute isProtected={true}>
-                    <UserDashboard />
-                  </ProtectedRoute>
-                }
-              >
-                <Route path="cart" element={<Cart />} />
-                <Route path="order-summary" element={<OrderSummary />} />
-                <Route path="shipping-details" element={<ShippingDetails />} />
-                <Route path="payment" element={<Payment />} />
-                <Route path="profile" element={<UserProfile />} />
-                <Route path="my-order" element={<MyOrders />} />
-                <Route path="Order-Confirmed" element={<OrderConfirmed />} />
-              </Route>
-
-              {/* Owner */}
-              <Route
-                element={
-                  <ProtectedRoute isProtected={true}>
-                    <OwnerDashboard />
-                  </ProtectedRoute>
-                }
-              >
-                <Route path="owner/dashboard" element={<OwnerHome />} />
-                <Route path="owner/orders" element={<Orders />} />
-                <Route path="owner/add-item" element={<AddItems />} />
-                <Route path="owner/items" element={<OwnerItems />} />
-                <Route path="owner/profile" element={<OwnerProfile />} />
-              </Route>
-
-              {/* Auth */}
-              <Route
-                path="signin"
-                element={
-                  <ProtectedRoute isProtected={false}>
-                    <SignIn />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="signup"
-                element={
-                  <ProtectedRoute isProtected={false}>
-                    <Signup />
-                  </ProtectedRoute>
-                }
-              />
-
-              {/* 404 */}
-              <Route path="*" element={<PageNotFound />} />
-            </Routes>
-          </Suspense>
-
-        )
-      }
-=======
-      <Suspense fallback={<Loader />}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-
-          {/* User */}
-          <Route element={<UserDashboard />}>
-            <Route path="/" element={<Hero />} />
-            <Route path="/menu" element={<Items />} />
+        {/* PROTECTED ROUTES */}
+        <Route element={<ProtectedRoute />}>
+          <Route element={<UserLayout />}>
+            <Route path="/my-order" element={<MyOrders/>} />
+            <Route path="/cart" element={<Cart/>} />
+            <Route path="/profile" element={<Profile/>} />
+            <Route path="/shipping-details" element={<ShippingAddressPage/>} />
+            <Route path="/checkout" element={<OrderSummary/>} />
           </Route>
+        </Route>
 
-          <Route
-            element={
-              <ProtectedRoute isProtected={true}>
-                <UserDashboard />
-              </ProtectedRoute>
-            }
-          >
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/order-summary" element={<OrderSummary />} />
-            <Route path="/shipping-details" element={<ShippingDetails />} />
-            <Route path="/payment" element={<Payment />} />
-            <Route path="/profile" element={<UserProfile />} />
-          </Route>
-
-          {/* Owner */}
-          <Route
-            element={
-              <ProtectedRoute isProtected={true}>
-                <OwnerDashboard />
-              </ProtectedRoute>
-            }
-          >
-            <Route path="/owner/dashboard" element={<OwnerHome />} />
-            <Route path="/owner/orders" element={<Orders />} />
-            <Route path="/owner/add-item" element={<AddItems />} />
-            <Route path="/owner/items" element={<OwnerItems />} />
-            <Route path="/owner/profile" element={<OwnerProfile />} />
-          </Route>
-
-          {/* Auth */}
-          <Route
-            path="/signin"
-            element={
-              <ProtectedRoute isProtected={false}>
-                <SignIn />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/signup"
-            element={
-              <ProtectedRoute isProtected={false}>
-                <Signup />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </Suspense>
-    </>
+        <Route path="*" element={<h1>Page Not Found</h1>} />
+      </Routes>
+    </Suspense>
   );
-}
+};
 
 export default App;
