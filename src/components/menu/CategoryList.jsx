@@ -46,7 +46,7 @@ const CategoryList = () => {
         overflowY: "hidden",
         px: 2,
         py: 2,
-        justifyContent:"center",
+        justifyContent:{ xs: "start", md: "center" },
 
         // 🔥 smooth scrolling
         scrollBehavior: "smooth",

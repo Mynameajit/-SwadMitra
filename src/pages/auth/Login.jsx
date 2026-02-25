@@ -71,7 +71,7 @@ const Login = () => {
           justifyContent: "center",
           px: 2,
           position: "relative",
-          zIndex: 1,
+          zIndex: 10,
         }}
       >
         <Paper

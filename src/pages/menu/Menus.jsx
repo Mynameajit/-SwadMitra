@@ -148,7 +148,7 @@ const Menus = () => {
         </Stack>
 
         {/* ✅ Bottom circular loader */}
-        <Stack alignItems="center" justifyContent="center" py={8}>
+        <Stack alignItems="center" justifyContent="center" py={2}>
           {isFetchingMore && <CircularProgress size={32} />}
           {!hasMore && menus?.length > 0 && (
             <Typography sx={{ mt: 1, opacity: 0.7 }}>

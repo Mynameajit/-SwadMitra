@@ -37,6 +37,7 @@ const CartItemCard = React.memo(({ item = {}, dispatch }) => {
     foodType = "Veg",
     stock = 0,
   } = item;
+console.log(stock);
 
   /* ================= QTY HANDLERS ================= */
   const increaseQty = async () => {

@@ -1,13 +1,6 @@
-// HeroImprovedRight_FixedImages.jsx
+// Hero.jsx
+
 import React from "react";
-import WhatshotIcon from "@mui/icons-material/Whatshot";
-import BoltIcon from "@mui/icons-material/Bolt";
-import IcecreamIcon from "@mui/icons-material/Icecream";
-import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
-import TimerOutlinedIcon from "@mui/icons-material/TimerOutlined";
-import ShieldOutlinedIcon from "@mui/icons-material/ShieldOutlined";
-import { motion } from "framer-motion";
-import { FastDelivery, HotFresh, SweetTreat } from "../../utils/imageData";
 import {
   Box,
   Container,
@@ -20,21 +13,42 @@ import {
   useMediaQuery,
 } from "@mui/material";
 
+import WhatshotIcon from "@mui/icons-material/Whatshot";
+import BoltIcon from "@mui/icons-material/Bolt";
+import IcecreamIcon from "@mui/icons-material/Icecream";
+import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
+import TimerOutlinedIcon from "@mui/icons-material/TimerOutlined";
+import ShieldOutlinedIcon from "@mui/icons-material/ShieldOutlined";
 
+import { motion } from "framer-motion";
+import { FastDelivery, HotFresh, SweetTreat } from "../../utils/imageData";
+
+/* ================= MOTION SETUP ================= */
+
+const MotionBox = motion(Box);
 const MotionTypography = motion(Typography);
 const MotionStack = motion(Stack);
 const MotionChip = motion(Chip);
 
-/* variant accepts a delay via custom prop */
-const containerVariants = {
-  hidden: { opacity: 0, y: 24, scale: 0.995 },
-  visible: (delay = 0) => ({
+const parentVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.15,
+    },
+  },
+};
+
+const childVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
     opacity: 1,
     y: 0,
-    scale: 1,
-    transition: { duration: 0.56, delay, ease: "easeOut" },
-  }),
+    transition: { duration: 0.45, ease: "easeOut" },
+  },
 };
+
+/* ================= DATA ================= */
 
 const stats = [
   { id: 1, label: "Avg delivery", value: "30–40 min", Icon: TimerOutlinedIcon },
@@ -42,321 +56,254 @@ const stats = [
   { id: 3, label: "Contactless", value: "Contactless", Icon: LocalShippingOutlinedIcon },
 ];
 
+const cardsData = [
+  {
+    img: HotFresh,
+    label: "Hot & Fresh",
+    color: "#FF4D00",
+    Icon: WhatshotIcon,
+    position: { top: "6%", left: "4%" },
+  },
+  {
+    img: FastDelivery,
+    label: "Fast Delivery",
+    color: "#0080FF",
+    Icon: BoltIcon,
+    position: { top: "36%", right: "6%" },
+  },
+  {
+    img: SweetTreat,
+    label: "Sweet Treat",
+    color: "#D81B60",
+    Icon: IcecreamIcon,
+    position: { bottom: "0%", left: "30%" },
+  },
+];
+
+/* ================= COMPONENT ================= */
+
 export default function Hero({ onPrimaryClick }) {
   const theme = useTheme();
   const isSm = useMediaQuery(theme.breakpoints.down("sm"));
-
-  const textPrimary = theme.palette.mode === "dark" ? "#fff" : theme.palette.text.primary;
-  const textSecondary = theme.palette.mode === "dark" ? "#ddd" : theme.palette.text.secondary;
   const accent = "#FF1100";
 
+  const textSecondary =
+    theme.palette.mode === "dark"
+      ? "#ddd"
+      : theme.palette.text.secondary;
+
   return (
-    <Box component="section" sx={{ pt: { xs: 2, md: 11 } }}>
-      <Container maxWidth="xl" sx={{ px: { xs: 2, md: 15 }, pb: { xs: 0, md: 16 } }}>
-        <Grid container spacing={{ xs: 2, md: 8}} alignItems="center" pt={{ xs: 6, md: 1 }}>
+    <Box component="section" sx={{ pt: { xs: 1, md: 11 } }}>
+      <Container
+        maxWidth="xl"
+        sx={{ px: { xs: 2, md: 15 }, pb: { xs: 4, md: 16 } }}
+      >
+        <Grid
+          container
+          spacing={{ xs: 2, md: 8 }}
+          alignItems="center"
+          pt={{ xs: 2, md: 1 }}
+        >
+          {/* ================= LEFT SIDE ================= */}
 
-          {/* LEFT (text) */}
           <Grid item xs={12} md={6}>
-            <Stack spacing={2}>
-              <MotionChip
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-                custom={0.12}
-                icon={<LocalShippingOutlinedIcon sx={{ color: "white" }} />}
-                label="Fresh & Local"
-                sx={{
-                  background: "linear-gradient(90deg, rgb(255, 0, 128), #FF1100)",
-                  fontWeight: 700,
-                  width: "fit-content",
-                  px: 1.5,
-                  color: "white",
-                }}
-                aria-label="Fresh and local"
-              />
-
-              <MotionTypography
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-                custom={0.28}
-                sx={{
-                  fontWeight: 900,
-                  lineHeight: 1.05,
-                  letterSpacing: "-0.02em",
-                  fontSize: { xs: "2.4rem", md: "3.8rem" },
-                  background: "linear-gradient(90deg, #FF1100, #FF5A36)",
-                  backgroundClip: "text",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                }}
-                aria-hidden={false}
-              >
-                Real flavours. Honest prices.
-                <br />
-                Delivered with care.
-              </MotionTypography>
-
-              <MotionTypography
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-                custom={0.44}
-                color={textSecondary}
-                sx={{ maxWidth: 560 }}
-              >
-                Your favourite meals, prepared fresh by top chefs and delivered hot & fast.
-                Explore new restaurants, trending dishes, and daily curated picks.
-              </MotionTypography>
-
-              <MotionStack
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-                custom={0.6}
-                direction="row"
-                spacing={2}
-                sx={{ mt: 2 }}
-              >
-                <Button
-                  variant="contained"
-                  size="large"
-                  onClick={() => (onPrimaryClick ? onPrimaryClick() : null)}
+            <motion.div
+              variants={parentVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <Stack spacing={2}>
+                <MotionChip
+                  variants={childVariants}
+                  icon={<LocalShippingOutlinedIcon sx={{ color: "white" }} />}
+                  label="Fresh & Local"
                   sx={{
-                    px: { xs: 2, md: 4 },
-                    borderRadius: 2,
+                    background:
+                      "linear-gradient(90deg, rgb(255, 0, 128), #FF1100)",
                     fontWeight: 700,
-                    fontSize: { xs: 14, md: 16 },
-                    background: "linear-gradient(90deg, rgb(255, 0, 128), #FF1100)",
+                    width: "fit-content",
+                    px: 1.5,
+                    color: "white",
                   }}
-                  aria-label="Order now"
-                >
-                  Order Now
-                </Button>
+                />
 
-                <Button
-                  variant="outlined"
-                  size="large"
+                <MotionTypography
+                  variants={childVariants}
                   sx={{
-                    px: { xs: 2, md: 4 },
-                    borderRadius: 2,
-                    fontWeight: 700,
-                    fontSize: { xs: 14, md: 16 },
-                    color: accent,
-                    borderColor: accent,
-                    "&:hover": { borderColor: accent },
+                    fontWeight: 900,
+                    lineHeight: 1.05,
+                    letterSpacing: "-0.02em",
+                    fontSize: { xs: "2.4rem", md: "3.8rem" },
+                    background: "linear-gradient(90deg, #FF1100, #FF5A36)",
+                    backgroundClip: "text",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
                   }}
-                  aria-label="Explore menu"
                 >
-                  Explore Menu
-                </Button>
-              </MotionStack>
+                  Real flavours. Honest prices.
+                  <br />
+                  Delivered with care.
+                </MotionTypography>
 
-              {/* Stats */}
-              <MotionStack
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-                custom={0.84}
-                width="100%"
-                direction={{ xs: "column", md: "row" }}
-                spacing={2}
-                alignItems={{ xs: "center", md: "flex-start" }}
-                textAlign={{ xs: "center", md: "start" }}
-                pt={3}
-              >
-                {stats.map((s, idx) => {
-                  const Icon = s.Icon;
-                  return (
-                    <Stack
-                      direction={{ xs: "column", md: "row" }}
-                      key={s.id}
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1.5,
-                        p: { xs: 2, md: 1.5 },
-                        bgcolor:
-                          theme.palette.mode === "light"
-                            ? "rgba(255,255,255,0.48)"
-                            : "rgba(0,0,0,0.45)",
-                        borderRadius: 2,
-                        boxShadow:
-                          theme.palette.mode === "light"
-                            ? "0 4px 12px rgba(0,0,0,0.08)"
-                            : "0 4px 12px rgba(0,0,0,0.6)",
-                        width: { xs: "95%", md: 220 },
-                        border: "1px solid rgba(0,0,0,0.06)",
-                      }}
-                    >
-                      <Icon sx={{ color: accent }} />
-                      <Box>
-                        <Typography sx={{ fontWeight: 800 }}>{s.value}</Typography>
-                        <Typography variant="caption" color={textSecondary}>
-                          {s.label}
-                        </Typography>
-                      </Box>
-                    </Stack>
-                  );
-                })}
-              </MotionStack>
-            </Stack>
+                <MotionTypography
+                  variants={childVariants}
+                  color={textSecondary}
+                  sx={{ maxWidth: 560 }}
+                >
+                  Your favourite meals, prepared fresh by top chefs and
+                  delivered hot & fast. Explore new restaurants, trending
+                  dishes, and daily curated picks.
+                </MotionTypography>
+
+                <MotionStack
+                  variants={childVariants}
+                  direction="row"
+                  spacing={2}
+                  sx={{ mt: 2 }}
+                >
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={onPrimaryClick}
+                    sx={{
+                      px: { xs: 2, md: 4 },
+                      borderRadius: 2,
+                      fontWeight: 700,
+                      background:
+                        "linear-gradient(90deg, rgb(255, 0, 128), #FF1100)",
+                    }}
+                  >
+                    Order Now
+                  </Button>
+
+                  <Button
+                    variant="outlined"
+                    size="large"
+                    sx={{
+                      px: { xs: 2, md: 4 },
+                      borderRadius: 2,
+                      fontWeight: 700,
+                      color: accent,
+                      borderColor: accent,
+                      "&:hover": { borderColor: accent },
+                    }}
+                  >
+                    Explore Menu
+                  </Button>
+                </MotionStack>
+
+                {/* Stats */}
+                <MotionStack
+                  variants={childVariants}
+                  direction={{ xs: "column", md: "row" }}
+                  spacing={2}
+                  pt={3}
+                >
+                  {stats.map((s) => {
+                    const Icon = s.Icon;
+                    return (
+                      <Stack
+                        key={s.id}
+                        direction="row"
+                        alignItems="center"
+                        gap={1.5}
+                        p={2}
+                        sx={{
+                          borderRadius: 2,
+                          bgcolor:
+                            theme.palette.mode === "light"
+                              ? "rgba(255,255,255,0.6)"
+                              : "rgba(0,0,0,0.45)",
+                          boxShadow:
+                            theme.palette.mode === "light"
+                              ? "0 4px 12px rgba(0,0,0,0.08)"
+                              : "0 4px 12px rgba(0,0,0,0.6)",
+                          width: { xs: "100%", md: 220 },
+                        }}
+                      >
+                        <Icon sx={{ color: accent }} />
+                        <Box>
+                          <Typography fontWeight={800}>
+                            {s.value}
+                          </Typography>
+                          <Typography
+                            variant="caption"
+                            color={textSecondary}
+                          >
+                            {s.label}
+                          </Typography>
+                        </Box>
+                      </Stack>
+                    );
+                  })}
+                </MotionStack>
+              </Stack>
+            </motion.div>
           </Grid>
 
-          {/* RIGHT (cards) — use md=6 so total columns = 12 */}
+          {/* ================= RIGHT SIDE ================= */}
+
           <Grid item xs={12} md={6}>
             <Box
               sx={{
                 position: "relative",
-                height: isSm ? "auto" : 430,
-                display: "flex",
+                minHeight: isSm ? 400 : 430,
+                display: {md: "flex", xs: "none"},
                 justifyContent: "center",
                 alignItems: "center",
-                pt: { xs: 2, md: 0 },
-                pb: { xs: 4, md: 0 },
               }}
-              aria-hidden={false}
             >
-              {/* Card 1 */}
-              <MotionStack
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-                custom={1.08}
-                whileHover={{ scale: 1.03 }}
-                sx={{
-                  position: "absolute",
-                  top: isSm ? 0 : "6%",
-                  left: isSm ? "50%" : "4%",
-                  transform: isSm ? "translateX(-50%)" : "none",
-                  width: isSm ? "86%" : 230,
-                  height: isSm ? 160 : 220,
-                  borderRadius: 2,
-                  overflow: "hidden",
-                  boxShadow: "0 10px 25px rgba(0,0,0,0.12)",
-                }}
-                role="img"
-                aria-label="Hot and fresh"
-              >
-                <Box
-                  component="img"
-                  src={HotFresh}
-                  alt="Hot & Fresh dish"
-                  loading="lazy"
-                  onError={(e) => (e.currentTarget.src = "https://via.placeholder.com/400x240?text=Food")}
-                  sx={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                />
+              {cardsData.map((card, i) => {
+                const Icon = card.Icon;
 
-                <Chip
-                  label="Hot & Fresh"
-                  icon={<WhatshotIcon sx={{ color: "white" }} />}
-                  sx={{
-                    position: "absolute",
-                    top: 10,
-                    left: 10,
-                    bgcolor: "#FF4D00",
-                    color: "white",
-                    fontWeight: 700,
-                    px: 1,
-                  }}
-                />
-              </MotionStack>
+                return (
+                  <MotionBox
+                    key={i}
+                    whileHover={{ scale: 1.03 }}
+                    transition={{ type: "spring", stiffness: 120 }}
+                    sx={{
+                      position: "absolute",
+                      ...card.position,
+                      width: isSm ? "80%" : 230,
+                      height: isSm ? 160 : 220,
+                      borderRadius: 2,
+                      overflow: "hidden",
+                      boxShadow: "0 10px 25px rgba(0,0,0,0.12)",
+                      willChange: "transform",
+                    }}
+                  >
+                    <Box
+                      component="img"
+                      src={card.img}
+                      alt={card.label}
+                      loading="lazy"
+                      sx={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }}
+                    />
 
-              {/* Card 2 */}
-              <MotionStack
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-                custom={1.36}
-                whileHover={{ scale: 1.035 }}
-                sx={{
-                  position: "absolute",
-                  top: isSm ? 170 : "36%",
-                  right: isSm ? "50%" : "6%",
-                  transform: isSm ? "translateX(50%)" : "none",
-                  width: isSm ? "86%" : 230,
-                  height: isSm ? 160 : 220,
-                  borderRadius: 2,
-                  overflow: "hidden",
-                  boxShadow: "0 10px 25px rgba(0,0,0,0.12)",
-                }}
-                role="img"
-                aria-label="Fast delivery"
-              >
-                <Box
-                  component="img"
-                  src={FastDelivery}
-                  alt="Fast delivery dish"
-                  loading="lazy"
-                  onError={(e) => (e.currentTarget.src = "https://via.placeholder.com/400x240?text=Food")}
-                  sx={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                />
-
-                <Chip
-                  label="Fast Delivery"
-                  icon={<BoltIcon sx={{ color: "white" }} />}
-                  sx={{
-                    position: "absolute",
-                    top: 10,
-                    left: 10,
-                    bgcolor: "#0080FF",
-                    color: "white",
-                    fontWeight: 700,
-                    px: 1,
-                  }}
-                />
-              </MotionStack>
-
-              {/* Card 3 */}
-              <MotionStack
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-                custom={1.64}
-                whileHover={{ scale: 1.03 }}
-                sx={{
-                  position: "absolute",
-                  bottom: isSm ? -12 : "0%",
-                  left: isSm ? "50%" : "30%",
-                  transform: isSm ? "translateX(-50%)" : "none",
-                  width: isSm ? "80%" : 220,
-                  height: isSm ? 150 : 200,
-                  borderRadius: 2,
-                  overflow: "hidden",
-                  boxShadow: "0 8px 20px rgba(0,0,0,0.1)",
-                }}
-                role="img"
-                aria-label="Sweet treats"
-              >
-                <Box
-                  component="img"
-                  src={SweetTreat}
-                  alt="Sweet treat dessert"
-                  loading="lazy"
-                  onError={(e) => (e.currentTarget.src = "https://via.placeholder.com/400x240?text=Food")}
-                  sx={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                />
-
-                <Chip
-                  label="Sweet Treat"
-                  icon={<IcecreamIcon sx={{ color: "white" }} />}
-                  sx={{
-                    position: "absolute",
-                    top: 10,
-                    left: 10,
-                    bgcolor: "#D81B60",
-                    color: "white",
-                    fontWeight: 700,
-                    px: 1,
-                  }}
-                />
-              </MotionStack>
+                    <Chip
+                      label={card.label}
+                      icon={<Icon sx={{ color: "white" }} />}
+                      sx={{
+                        position: "absolute",
+                        top: 10,
+                        left: 10,
+                        bgcolor: card.color,
+                        color: "white",
+                        fontWeight: 700,
+                      }}
+                    />
+                  </MotionBox>
+                );
+              })}
             </Box>
           </Grid>
         </Grid>
       </Container>
-
-
     </Box>
   );
 }

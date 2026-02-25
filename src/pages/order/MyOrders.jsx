@@ -8,7 +8,6 @@ import OrderCardSkeleton from "../../components/order/OrderCardSkeleton";
 const MyOrders = () => {
   const dispatch = useDispatch();
   const { orders, loading } = useSelector((state) => state.order);
-console.log(orders);
 
   useEffect(() => {
     dispatch(fetchUserOrders());
@@ -17,9 +16,12 @@ console.log(orders);
   return (
     <Stack
       px={{ xs: 2, md: 8 }}
-      py={3}
+      py={1}
       spacing={3}
       minHeight="100vh"
+      position={"relative"}
+      zIndex={1}
+      pb={10}
     >
       <Typography
         fontSize={{ xs: 22, md: 32 }}

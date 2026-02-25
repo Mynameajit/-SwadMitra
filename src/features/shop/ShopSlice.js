@@ -21,7 +21,7 @@ const ShopSlice = createSlice({
             })
             .addCase(fetchShopsInCity.fulfilled, (state, action) => {
                 state.loading = false
-                state.shopsInCity = action.payload.shop
+                state.shopsInCity = action.payload.shops
             })
             .addCase(fetchShopsInCity.rejected, (state, action) => {
                 state.loading = false

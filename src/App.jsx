@@ -1,89 +1,128 @@
-import { Routes, Route, Outlet } from "react-router-dom";
-import Navbar from "./components/common/Navbar";
-import Login from "./pages/auth/Login";
-import Register from "./pages/auth/Register";
-import { useDispatch, useSelector } from "react-redux";
+import { Routes, Route } from "react-router-dom";
 import { Suspense, useEffect } from "react";
-import { fetchUser } from "./features/auth/authService";
-import ProtectedRoute from "./routes/ProtectedRoute";
+import { Box } from "@mui/material";
+import { lazy } from "react";
+
 import Loader from "./components/common/Loader";
-import Home from "./pages/home/Home";
-import UserLayout from "./pages/UserLayouts";
+import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
 import Menus from "./pages/menu/Menus";
+import { fetchUser } from "./features/auth/authService";
 import { fetchMenus } from "./features/menu/MenuService";
-import Profile from "./pages/profile/Profile"
-import { fetchToCart } from "./features/cart/cartService";
-import Cart from "./pages/cart/Cart";
-import OrderSummary from "./pages/cart/OrderSummary";
-import AddressForm from "./components/address/AddressForm";
-import CartItemLoader from "./components/cart/CartItemLoader";
-import ShippingAddressPage from "./pages/cart/ShippingAddress";
-import { fetchUserOrders } from "./features/order/orderService";
-import MyOrders from "./pages/order/MyOrders";
+import { useDispatch, useSelector } from "react-redux";
 
-/* Pages */
+/* ================== LAZY PAGES ================== */
 
-const App = () => {
+/* Public */
+const Home = lazy(() => import("./pages/home/Home"));
+const Login = lazy(() => import("./pages/auth/Login"));
+const Register = lazy(() => import("./pages/auth/Register"));
+const PageNotFound = lazy(() => import("./pages/PageNotFound"));
+
+/* User */
+const UserDashboard = lazy(() => import("./pages/UserLayouts"));
+const Hero = lazy(() => import("./pages/home/Hero"));
+const Items = lazy(() => import("./pages/menu/Menus"));
+const Cart = lazy(() => import("./pages/cart/Cart"));
+const OrderSummary = lazy(() => import("./pages/cart/OrderSummary"));
+const ShippingDetails = lazy(() => import("./pages/cart/ShippingAddress"));
+// const Payment = lazy(() => import("./pages/"));
+const UserProfile = lazy(() => import("./pages/profile/Profile"));
+const MyOrders = lazy(() => import("./pages/order/MyOrders"));
+const OrderConfirmed = lazy(() => import("./pages/OrderConfirmed.jsx"));
+
+
+const BackgroundCircles = lazy(() => import("./components/ui/Background"));
+
+/* ================== APP ================== */
+
+function App() {
+
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.user);
-
-
+  const { isAuthenticated, user } = useSelector((state) => state.user);
+  const { menus } = useSelector((state) => state.menus);
 
   useEffect(() => {
-    dispatch(fetchUser());
-    dispatch(fetchMenus());
-    dispatch(fetchUserOrders());
+    if (!isAuthenticated) {
+      dispatch(fetchUser());
+    }
+  }, [isAuthenticated, dispatch]);
 
-  }, [dispatch]);
-
-
-  if (loading.profile) {
-    return <Loader />;
-  }
+  useEffect(() => {
+    if (!menus) {
+      dispatch(fetchMenus());
+    }
+  }, [ dispatch]);
 
   return (
-    <Suspense fallback={<Loader />}>
-      <Routes>
-        {/* PUBLIC ROUTES */}
-        <Route element={<UserLayout />}>
-          <Route index element={<Home />} />
-          <Route path="/menu" element={<Menus />} />
-        </Route>
+    <>
+      {/* Background Animation */}
+      <Box
+        sx={{
+          position: "fixed",
+          inset: 0,
+          zIndex: 0,
+          pointerEvents: "none",
+        }}
+      >
+        <Suspense fallback={null}>
+          <BackgroundCircles />
+        </Suspense>
+      </Box>
 
-        {/* Auth ROUTES */}
-        <Route
-          path="/login"
-          element={
-            <PublicRoute>
-              <Login />
-            </PublicRoute>
-          }
-        />
-        <Route
-          path="/register"
-          element={
-            <PublicRoute>
-              <Register />
-            </PublicRoute>
-          }
-        />
+      <Suspense fallback={<Loader />}>
+        <Routes>
 
-        {/* PROTECTED ROUTES */}
-        <Route element={<ProtectedRoute />}>
-          <Route element={<UserLayout />}>
-            <Route path="/my-order" element={<MyOrders/>} />
-            <Route path="/cart" element={<Cart/>} />
-            <Route path="/profile" element={<Profile/>} />
-            <Route path="/shipping-details" element={<ShippingAddressPage/>} />
-            <Route path="/checkout" element={<OrderSummary/>} />
+          {/* ================= USER ROUTES ================= */}
+          <Route element={<UserDashboard />}>
+          <Route path="/" element={<Home />} />
+            <Route path="/menu" element={<Menus />} />
+            <Route path="/items" element={<Items />} />
+            <Route path="/my-orders" element={<MyOrders />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/profile" element={<UserProfile />} />
+
           </Route>
-        </Route>
 
-        <Route path="*" element={<h1>Page Not Found</h1>} />
-      </Routes>
-    </Suspense>
+          {/* Protected User */}
+          <Route
+            element={
+              <ProtectedRoute >
+                <UserDashboard />
+              </ProtectedRoute>
+            }
+          >
+            <Route path="/checkout" element={<OrderSummary />} />
+            <Route path="/shipping-details" element={<ShippingDetails />} />
+            {/* <Route path="/payment" element={<Payment />} /> */}
+            <Route path="/order-confirmed" element={<OrderConfirmed />} />
+          </Route>
+
+       
+          {/* ================= AUTH ================= */}
+          <Route
+            path="/login"
+            element={
+              <PublicRoute >
+                <Login />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <PublicRoute >
+                <Register />
+              </PublicRoute>
+            }
+          />
+
+          {/* 404 */}
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </Suspense>
+    </>
   );
-};
+}
 
 export default App;

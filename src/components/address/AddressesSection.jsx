@@ -165,10 +165,11 @@ export const AddressesSection = ({ isShowDelete = true }) => {
               address={address}
               onEdit={onEdit}
               loading={loading}
-              onSetDefault={onSelectedDefaultAdd}
+              onselectend={onSelectedDefaultAdd}
               onDelate={onDelate}
               deletingId={deletingId}
               isShowDelete={isShowDelete}
+              
             />
           ))}
         </Stack>

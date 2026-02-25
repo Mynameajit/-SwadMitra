@@ -61,7 +61,7 @@ const MenuCard = ({ item = {}, handelAddCart, selectId }) => {
   };
 
   const handleAdd = () => {
-    if (stock === 0) return;
+    if (stock === 0) return toast.error("Item is out of stock");
     handelAddCart(item, qty);
   };
 
@@ -75,7 +75,7 @@ const MenuCard = ({ item = {}, handelAddCart, selectId }) => {
       sx={{
         borderRadius: 4,
         overflow: "hidden",
-        height: 480,
+        height: 500,
         display: "flex",
         flexDirection: "column",
         boxShadow: "0 8px 25px rgba(0,0,0,0.08)",
@@ -117,7 +117,7 @@ const MenuCard = ({ item = {}, handelAddCart, selectId }) => {
       </Box>
 
       {/* CONTENT */}
-      <CardContent sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
+      <CardContent sx={{ flexGrow: 1, display: "flex", flexDirection: "column",py:2 }}>
         {/* Name + Veg/Nonveg */}
         <Stack direction="row" justifyContent="space-between">
           <Typography variant="h6" fontWeight={700} noWrap>
@@ -134,7 +134,10 @@ const MenuCard = ({ item = {}, handelAddCart, selectId }) => {
             {foodType}
           </Typography>
         </Stack>
-
+{
+  console.log(shop)
+  
+}
         {/* Shop Name */}
         <Typography variant="caption" color="text.secondary">
           {shop?.name} • {category}
@@ -203,7 +206,7 @@ const MenuCard = ({ item = {}, handelAddCart, selectId }) => {
         </Typography>
 
         {/* Bottom Section */}
-        <Stack direction="row" spacing={2} mt="auto">
+        <Stack direction="row" spacing={2}  mt={2}>
           <Stack direction="row" spacing={1} alignItems="center">
             <Button
               size="small"

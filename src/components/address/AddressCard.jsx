@@ -73,10 +73,11 @@ export const AddressCard = ({
         <Typography
           sx={{
             backgroundColor: "rgba(255,17,0,0.1)",
-            padding: "0px 6px",
+            padding: "2px 6px",
             fontSize: 12,
             borderRadius: 1,
             color: "#FF1100",
+            height: "fit-content",
             fontWeight: 700,
             textTransform: "capitalize",
             display: "flex",
@@ -97,6 +98,7 @@ export const AddressCard = ({
               borderRadius: 999,
               background: "rgba(34,197,94,0.15)",
               color: "#22c55e",
+              height: "fit-content",
             }}
           >
             ✅ Default
@@ -105,7 +107,7 @@ export const AddressCard = ({
       </Stack>
 
       {/* Address */}
-      <Typography sx={{ fontSize: 14, color: "gray", mt: 1 }}>
+      <Typography sx={{ fontSize: 14, color: "gray", mt: 1,textAlign:"start" }}>
         {address?.buildingName || "Building"}, {address?.landmark || "Landmark"}
       </Typography>
 

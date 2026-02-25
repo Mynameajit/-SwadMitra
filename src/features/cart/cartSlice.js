@@ -17,6 +17,10 @@ const initialState = {
     clear: false,
   },
   deliveryAddress: null,
+  paymentMethod: null,
+  totalAmount: 0,
+  deliveryCharge: 0,
+  platformFee: 20,
   message: null,
   error: null,
 };
@@ -27,7 +31,14 @@ const cartSlice = createSlice({
   reducers: {
     deliveryAddress: (state, action) => {
       state.deliveryAddress = action.payload
-    }
+    },
+    setPaymentMethod: (state, action) => {
+      state.paymentMethod = action.payload
+    },
+    setTotalAmount: (state, action) => {
+      state.totalAmount = action.payload
+    },
+
   },
   extraReducers: (builder) => {
     builder
@@ -101,5 +112,5 @@ const cartSlice = createSlice({
       });
   },
 });
-export const {deliveryAddress} =cartSlice.actions
+export const { deliveryAddress ,setPaymentMethod,setTotalAmount} = cartSlice.actions
 export default cartSlice.reducer;

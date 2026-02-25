@@ -28,7 +28,7 @@ import { useThemeMode } from "../../theme/ThemeModeProvider ";
 import { fetchLocation } from "../../features/location/LocationService";
 
 /* ======================= STYLED COMPONENTS ======================= */
-const StyledBadge = styled(Badge)(() => ({
+export const StyledBadge = styled(Badge)(() => ({
   "& .MuiBadge-badge": {
     fontSize: "0.7rem",
     padding: "4px 6px",
@@ -58,8 +58,8 @@ const NAV_ITEMS = (cartCount) => [
     ),
   },
   {
-    label: "Order",
-    path: "/my-order",
+    label: "Orders",
+    path: "/my-orders",
     icon: <FaClipboardList size={20} />,
   },
 ];
@@ -75,13 +75,13 @@ const Navbar = () => {
 
   const { user } = useSelector((state) => state.user);
   const { currentCity, address } = useSelector((state) => state.location);
+  const { cartItems } = useSelector((state) => state.cart);
 
   useEffect(() => {
     dispatch(fetchLocation());
   }, [dispatch]);
 
-  const cartItems = [5, 5, 5, 5];
-  const cartCount = cartItems?.items?.length || 0;
+  const cartCount = cartItems?.length || 0;
   const navItems = NAV_ITEMS(cartCount);
 
   const isNavbarVisible = !HIDDEN_ROUTES.includes(location.pathname);

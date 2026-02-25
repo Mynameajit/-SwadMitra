@@ -3,7 +3,17 @@ import { Box, Typography, CircularProgress, useTheme } from "@mui/material";
 import { motion } from "framer-motion";
 import BackgroundCircles from "../ui/Background";
 
-
+/**
+ * ProjectLoaderSimple
+ * Props:
+ *  - logoComponent: optional React component (your Logo)
+ *  - title: string (default "SwadMitra")
+ *  - subtitle: string (optional)
+ *  - size: number (logo diameter px, default 84)
+ *
+ * Usage:
+ *  <ProjectLoaderSimple logoComponent={Logo} />
+ */
 export default function Loader({
   logoComponent: LogoComp = null,
   title = "SwadMitra",

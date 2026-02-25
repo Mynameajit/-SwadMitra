@@ -46,7 +46,6 @@ const Register = () => {
 
   const handleRegister = async (e) => {
    const res= await dispatch(registerUser({ fullName, email, password ,mobile})).unwrap();
-   console.log(res);
    
 
     navigate(from, { replace: true });

@@ -17,10 +17,15 @@ import toast from "react-hot-toast";
 import Loader from "../../components/common/Loader";
 import { AddressesSection } from "../../components/address/AddressesSection";
 import CheckoutSummary from "../../components/cart/CheckoutSummary";
-import { fetchToCart } from "../../features/cart/cartService";
+import { clearAllCart, fetchToCart } from "../../features/cart/cartService";
 import { fetchAddress } from "../../features/address/addressService";
 import { handlePayment } from "../../components/PaymentButton";
 import { placeOrder } from "../../features/order/orderService";
+import {
+  setPaymentMethod,
+  setTotalAmount,
+} from "../../features/cart/cartSlice";
+import OrderSummarySkeleton from "../../components/cart/OrderSummarySkeleton";
 
 const ACCENT = "#FF1100";
 
@@ -29,10 +34,14 @@ const OrderSummary = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { cartItems = [], deliveryAddress } = useSelector(
-    (state) => state.cart,
-  );
-  const { addresses = [] } = useSelector((state) => state.address);
+  const {
+    cartItems = [],
+    deliveryAddress,
+    totalAmount,
+    platformFee,
+    loading: cartLoader,
+  } = useSelector((state) => state.cart);
+  const { loading } = useSelector((state) => state.order);
 
   const items = cartItems ?? [];
 
@@ -68,42 +77,59 @@ const OrderSummary = () => {
   }, [items]);
 
   const deliveryCharge = finalAmount < 599 ? 30 : 0;
-  const platformFee = 20;
 
-  const totalAmount = useMemo(() => {
-    return finalAmount + deliveryCharge + platformFee;
-  }, [finalAmount, deliveryCharge]);
+  useEffect(() => {
+    dispatch(setTotalAmount(finalAmount + deliveryCharge + platformFee));
+  }, [finalAmount, deliveryCharge, platformFee, dispatch]);
 
   /* ================= ADDRESS ================= */
 
   const handleCakeOut = async (paymentMethod) => {
+    dispatch(setPaymentMethod(paymentMethod));
     const payload = {
       paymentMethod,
       deliveryAddress,
       totalAmount,
       cartItems,
     };
+    console.log(payload);
+
     if (!deliveryAddress) {
       toast.error("Please select an address");
       return;
     }
     if (paymentMethod === "COD") {
       await dispatch(placeOrder(payload)).unwrap();
+      await dispatch(clearAllCart()).unwrap();
 
-      // navigate("/my-orders");
-      // toast.success("COD");
+      navigate("/order-confirmed");
     }
     if (paymentMethod === "ONLINE") {
-      handlePayment();
+      await handlePayment({
+        amount: totalAmount,
+        dispatch,
+        payload: placeOrder({
+          paymentMethod,
+          deliveryAddress,
+          totalAmount,
+          cartItems,
+        }),
+        onSuccess: async () => {
+          await dispatch(clearAllCart()).unwrap();
+          navigate("/order-confirmed");
+        },
+      });
     }
   };
 
-  if (!items.length) {
-    return <Typography>No items in cart</Typography>;
-  }
+  useEffect(() => {
+    if (!items.length && !cartLoader.get) {
+      navigate("/cart");
+    }
+  }, []);
 
   return (
-    <Suspense fallback={<Loader />}>
+    <Suspense fallback={<OrderSummarySkeleton />}>
       <Box px={{ xs: 1, md: 10 }} py={{ xs: 1, md: 2 }}>
         {/* HEADER */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
@@ -157,6 +183,7 @@ const OrderSummary = () => {
               plateFee={platformFee}
               total={totalAmount}
               onCheckout={handleCakeOut}
+              loading={loading.place}
             />
           </Stack>
         </Stack>

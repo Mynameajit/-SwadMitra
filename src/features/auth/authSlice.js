@@ -5,7 +5,6 @@ import { fetchUser, loginUser, logoutUser, registerUser } from "./authService";
 
 const authSlice = createSlice({
     name: "user",
-
     initialState: {
         user: null,
         isAuthenticated: false,
@@ -17,7 +16,8 @@ const authSlice = createSlice({
             address:false
         },
         error: null,
-        message: null
+        message: null,
+        
     },
     reducers: {
         clearMessage: (state) => {

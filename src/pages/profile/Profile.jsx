@@ -51,6 +51,7 @@ const Profile = () => {
             : "rgba(0,0,0,0.05)",
         backdropFilter: "blur(6px)",
         p: 2,
+        pb:{xs: 6, md: 1}
       }}
     >
       <Stack
@@ -77,38 +78,7 @@ const Profile = () => {
         <AddressesSection userData={user} loading={loading.Profile} />
       </Stack>
 
-      {/* ================= EDIT DIALOG UI ONLY ================= */}
-      {/* <Dialog
-        open={Boolean(isEdit)}
-        fullScreen={isMobile}
-        fullWidth={!isMobile}
-        maxWidth="md"
-        BackdropProps={{
-          sx: {
-            backdropFilter: "blur(8px)",
-            backgroundColor: "rgba(0,0,0,0.4)",
-          },
-        }}
-        PaperProps={{
-          sx: {
-            background:
-              theme.palette.mode === "dark"
-                ? "rgba(0,0,0,0.4)"
-                : "rgba(255,255,255,0.4)",
-            backdropFilter: "blur(10px)",
-            boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
-            borderRadius: isMobile ? 0 : 2,
-            border: `1px solid rgba(0,0,0,${
-              theme.palette.mode === "dark" ? 0.2 : 0.1
-            })`,
-            width: isMobile ? "100%" : "auto",
-            height: isMobile ? "100%" : "auto",
-            margin: isMobile ? 0 : "auto",
-          },
-        }}
-      >
-        <EditAddressDialogUI />
-      </Dialog> */}
+      
     </Box>
   );
 };

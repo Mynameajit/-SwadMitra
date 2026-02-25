@@ -36,7 +36,7 @@ export const AccountInfoCard = ({ userData }) => {
       <InfoRow
         icon={<Verified />}
         label="Status"
-        value={userData?.isVerified ? "Verified" : "Unverified"}
+        value={userData?.status }
       />
     </Stack>
   );

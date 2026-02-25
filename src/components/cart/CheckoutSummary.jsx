@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   Box,
   Button,
+  CircularProgress,
   Divider,
   Paper,
   Radio,
@@ -31,6 +32,7 @@ const CheckoutSummary = ({
   plateFee = 0,
   total = 0,
   onCheckout,
+  loading,
 }) => {
   const theme = useTheme();
   const [paymentMode, setPaymentMode] = useState("ONLINE");
@@ -51,23 +53,14 @@ const CheckoutSummary = ({
       }}
     >
       {/* HEADER */}
-      <Typography
-        fontWeight={900}
-        fontSize="1.2rem"
-        mb={2}
-        color={ACCENT}
-      >
-       Checkout Summary
+      <Typography fontWeight={900} fontSize="1.2rem" mb={2} color={ACCENT}>
+        Checkout Summary
       </Typography>
 
       {/* PRICE DETAILS */}
       <Stack spacing={1.4}>
         <PriceRow label="Subtotal" value={`₹${subtotal}`} />
-        <PriceRow
-          label="Discount"
-          value={`- ₹${discount}`}
-          color="#22c55e"
-        />
+        <PriceRow label="Discount" value={`- ₹${discount}`} color="#22c55e" />
         <PriceRow
           label="Delivery Charges"
           value={subtotal < 599 ? `₹${delivery}` : "FREE"}
@@ -132,6 +125,7 @@ const CheckoutSummary = ({
       {/* CHECKOUT BUTTON */}
       <Button
         fullWidth
+        disabled={loading}
         onClick={() => onCheckout(paymentMode)}
         sx={{
           mt: 3,
@@ -146,18 +140,20 @@ const CheckoutSummary = ({
           },
         }}
       >
-        {paymentMode === "COD"
-          ? "🧾 Place Order (COD)"
-          : "💳 Proceed to Payment"}
+        {loading ? (
+          <>
+            <CircularProgress size={22} />
+            Processing...
+          </>
+        ) : paymentMode === "COD" ? (
+          "🧾 Place Order (COD)"
+        ) : (
+          "💳 Proceed to Payment"
+        )}
       </Button>
 
       {/* TRUST TEXT */}
-      <Typography
-        fontSize={11}
-        color="gray"
-        textAlign="center"
-        mt={1.5}
-      >
+      <Typography fontSize={11} color="gray" textAlign="center" mt={1.5}>
         100% Secure Payments • Easy Returns
       </Typography>
     </Paper>

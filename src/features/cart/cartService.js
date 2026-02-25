@@ -73,9 +73,6 @@ export const clearAllCart = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const { data } = await api.delete("cart/clear");
-
-      if (data.success) toast.success(data.message);
-
       return data;
     } catch (error) {
       return rejectWithValue(error.response?.data);

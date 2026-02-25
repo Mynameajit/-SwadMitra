@@ -4,6 +4,7 @@ import { Email, Logout, Verified } from "@mui/icons-material";
 
 export const ProfileSummaryCard = ({ userData, logoutLoading, handleLogout }) => {
   const theme = useTheme();
+console.log(userData);
 
   return (
     <Stack

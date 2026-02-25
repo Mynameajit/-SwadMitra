@@ -1,8 +1,13 @@
 import axios from "axios";
 import api from "./api";
 
-export const createRazorpayOrder = ({ amount }) => {
-  return api.post(`/payment/create-order`, { amount });
+export const createRazorpayOrder = async ({ amount }) => {
+  const res = await api.post(`/payment/create-order`, { amount });
+  return res;
+  console.log(res);
 };
 
-export const verifyPayment = (data) => api.post("/payment/verify", data);
+export const verifyPayment =async (data) => {
+const res =await api.post("/payment/verify", data);
+return res;
+}

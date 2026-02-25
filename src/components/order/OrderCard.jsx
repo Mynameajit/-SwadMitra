@@ -7,6 +7,7 @@ import {
   Chip,
   Button,
   Grid,
+  useTheme,
 } from "@mui/material";
 import { motion } from "framer-motion";
 
@@ -30,6 +31,7 @@ const statusColor = (status) => {
 };
 
 const OrderCard = ({ order, onCancel }) => {
+  const theme=useTheme()
   return (
     <MotionStack
       initial={{ opacity: 0, y: 20 }}
@@ -45,8 +47,12 @@ const OrderCard = ({ order, onCancel }) => {
             p: { xs: 2, md: 3 },
             borderRadius: 4,
             boxShadow: "0 6px 25px rgba(0,0,0,0.08)",
-            background: "rgba(255,255,255,0.05)",
+            background: theme.palette.mode === "light"
+              ? "rgba(255,255,255,0.5)"
+              : "rgba(0,0,0,0.5use)",
             backdropFilter: "blur(8px)",
+            position: "relative",
+            zIndex: 1,
           }}
         >
           {/* SHOP HEADER */}
@@ -156,7 +162,21 @@ const OrderCard = ({ order, onCancel }) => {
             </Stack>
 
             <Stack direction="row" spacing={1}>
-              {shopOrder.status === "Pending" || shopOrder.status === "Accepted"  && (
+              {shopOrder.status === "Pending"  && (
+                <Button
+                  size="small"
+                  onClick={() => onCancel(shopOrder._id)}
+                  sx={{
+                    border: "1px solid #FF1100",
+                    color: "#FF1100",
+                    textTransform: "none",
+                    fontWeight: 600,
+                  }}
+                >
+                  Cancel Order
+                </Button>
+              )}
+              {shopOrder.status === "Accepted"   && (
                 <Button
                   size="small"
                   onClick={() => onCancel(shopOrder._id)}
